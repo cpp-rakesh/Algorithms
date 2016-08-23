@@ -24,17 +24,9 @@ namespace RECURRENCE {
 		void Compute(Tower<T> tower);
 
 	private:
-		void m_compute(const int &n,
-					   Tower<T>& source,
-					   Tower<T>& temp,
-					   Tower<T>& target);
-		Tower<T> m_get_tower(const TOWER_TYPE& type,
-							 const Tower<T>& source,
-							 const Tower<T>& temp,
-							 const Tower<T>& target);
-		void m_print(const Tower<T>& source,
-					 const Tower<T>& temp,
-					 const Tower<T>& target);
+		void m_compute(const int &n, Tower<T>& source, Tower<T>& temp, Tower<T>& target);
+		Tower<T> m_get_tower(const TOWER_TYPE& type, const Tower<T>& source, const Tower<T>& temp, const Tower<T>& target);
+		void m_print(const Tower<T>& source, const Tower<T>& temp, const Tower<T>& target);
 	};
 };
 
@@ -53,10 +45,7 @@ void RECURRENCE::TowerOfHanoi<T>::Compute(Tower<T> tower) {
 }
 
 template <typename T>
-void RECURRENCE::TowerOfHanoi<T>::m_compute(const int& n,
-											Tower<T>& source,
-											Tower<T>& temp,
-											Tower<T>& target) {
+void RECURRENCE::TowerOfHanoi<T>::m_compute(const int& n, Tower<T>& source, Tower<T>& temp, Tower<T>& target) {
 	if (n >= 0) {
 		m_compute(n - 1, source, target, temp);
 		target.Push(source.Pop());
@@ -68,10 +57,7 @@ void RECURRENCE::TowerOfHanoi<T>::m_compute(const int& n,
 }
 
 template <typename T>
-RECURRENCE::Tower<T> RECURRENCE::TowerOfHanoi<T>::m_get_tower(const TOWER_TYPE& type,
-															  const Tower<T>& source,
-															  const Tower<T>& temp,
-															  const Tower<T>& target) {
+RECURRENCE::Tower<T> RECURRENCE::TowerOfHanoi<T>::m_get_tower(const TOWER_TYPE& type, const Tower<T>& source, const Tower<T>& temp, const Tower<T>& target) {
 	if (type == source.Type())
 		return source;
 	else if (type == temp.Type())
@@ -81,9 +67,7 @@ RECURRENCE::Tower<T> RECURRENCE::TowerOfHanoi<T>::m_get_tower(const TOWER_TYPE& 
 }
 
 template <typename T>
-void RECURRENCE::TowerOfHanoi<T>::m_print(const Tower<T>& source,
-										  const Tower<T>& temp,
-										  const Tower<T>& target) {
+void RECURRENCE::TowerOfHanoi<T>::m_print(const Tower<T>& source, const Tower<T>& temp, const Tower<T>& target) {
 	std::cout << "-------------------------------------------------------------" << std::endl;
 	m_get_tower(SOURCE, source, temp, target).Print();
 	std::cout << " >>>>> ";
