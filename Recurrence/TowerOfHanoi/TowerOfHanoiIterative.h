@@ -2,6 +2,7 @@
 #define ALGORITHMS_RECURRENCE_TOWER_OF_HANOI_ITERATIVE_H_
 
 #include "Tower.h"
+#include <cmath>
 #include <iostream>
 
 template <typename T>
@@ -15,14 +16,9 @@ public:
 				 RECURRENCE::Tower<T>& C);
 	
 private:
-	int m_get_iterations(const int& n) const;
 	void m_move(RECURRENCE::Tower<T>& A,
 				RECURRENCE::Tower<T>& B);
-	void m_execute_in_bunch(const bool& is_odd,
-							RECURRENCE::Tower<T>& A,
-							RECURRENCE::Tower<T>& B,
-							RECURRENCE::Tower<T>& C);
-	void m_execute(const bool& is_odd, const int& index,
+	void m_execute(const bool& is_odd,
 				   RECURRENCE::Tower<T>& A,
 				   RECURRENCE::Tower<T>& B,
 				   RECURRENCE::Tower<T>& C);
@@ -42,28 +38,24 @@ void TowerOfHanoi<T>::Compute(RECURRENCE::Tower<T>& A,
 							  RECURRENCE::Tower<T>& B,
 							  RECURRENCE::Tower<T>& C) {
 	m_print(A, B, C);
-	std::cout << std::endl;
-	int n = m_get_iterations(A.Size());
+	int n = static_cast<int>(std::pow(2, A.Size())) - 1;
+	
 	while (1) {
-		std::cout << "n == " << n << std::endl;		
 		if (A.Size() % 2 == 0)
-			m_execute_in_bunch(false, A, B, C);
+			m_execute(false, A, B, C);
 		else
-			m_execute_in_bunch(true, A, B, C);
-		n -= 3;		
-		if (n < 0)
+			m_execute(true, A, B, C);
+
+		n -= 3;
+
+		if (n < 3)
 			break;
 	}
-
-	const bool is_odd = A.Size() % 2 == 0 ? false : true;
-}
-
-template <typename T>
-int TowerOfHanoi<T>::m_get_iterations(const int& n) const {
-	if (n == 1)
-		return 1;
-	else
-		return 2 * m_get_iterations(n - 1) + 1;
+	
+	if (n) {
+		m_move(A, C);
+		m_print(A, B, C);
+	}
 }
 
 template <typename T>
@@ -93,34 +85,10 @@ void TowerOfHanoi<T>::m_move(RECURRENCE::Tower<T>& A,
 }
 
 template <typename T>
-void TowerOfHanoi<T>::m_execute(const bool& is_odd, const int& index,
+void TowerOfHanoi<T>::m_execute(const bool& is_odd,
 								RECURRENCE::Tower<T>& A,
 								RECURRENCE::Tower<T>& B,
 								RECURRENCE::Tower<T>& C) {
-	if (is_odd) {
-		// Odd Execution
-		switch (index) {
-			case 0: m_move(A, C); break;
-			case 1: m_move(A, B); break;
-			case 2:	m_move(B, C); break;
-		}
-	} else {
-		// Even Execution
-		switch (index) {
-			case 0: m_move(A, B); break;
-			case 1: m_move(A, C); break;
-			case 2:	m_move(B, C); break;
-		}
-	}
-	
-	m_print(A, B, C);
-}
-
-template <typename T>
-void TowerOfHanoi<T>::m_execute_in_bunch(const bool& is_odd,
-										 RECURRENCE::Tower<T>& A,
-										 RECURRENCE::Tower<T>& B,
-										 RECURRENCE::Tower<T>& C) {
 	if (is_odd) {
 		m_move(A, C);
 		m_print(A, B, C);
@@ -129,9 +97,9 @@ void TowerOfHanoi<T>::m_execute_in_bunch(const bool& is_odd,
 		m_move(B, C);
 		m_print(A, B, C);		
 	} else {
-		m_move(A, C);
-		m_print(A, B, C);		
 		m_move(A, B);
+		m_print(A, B, C);		
+		m_move(A, C);
 		m_print(A, B, C);		
 		m_move(B, C);
 		m_print(A, B, C);		

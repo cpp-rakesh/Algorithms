@@ -1,8 +1,7 @@
-//#include "TowerOfHanoi.h"
+#include "TowerOfHanoi.h"
 #include "TowerOfHanoiIterative.h"
 #include <ctime>
 
-#if 0
 void test_recursive() {
 	const int n = 5;
 	RECURRENCE::Tower<int> tower(SOURCE);
@@ -14,9 +13,9 @@ void test_recursive() {
 	std::cout << "Execution time == [" << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "] seconds"
 			  << std::endl;	
 }
-#endif
+
 void test_iterative() {
-	const int n = 4;	
+	const int n = 6;	
 	RECURRENCE::Tower<int> A(SOURCE);
 	RECURRENCE::Tower<int> B(TEMP);
 	RECURRENCE::Tower<int> C(TARGET);	
