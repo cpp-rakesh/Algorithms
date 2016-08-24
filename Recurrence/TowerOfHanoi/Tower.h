@@ -25,11 +25,18 @@ namespace RECURRENCE {
 		Tower& operator = (const Tower& rhs);
 		~Tower();
 
-		void Push(const T& data);
-		T Pop();
+		void Front(const T& data);
+		T Front();
+
+		void Back(const T& data);
+		T Back();
+
+		T First() const;
+		T Last() const;
 		
 		TOWER_TYPE Type() const;
 		void Print() const;
+		void PrintR() const;
 		int Size() const;
 
 	private:
@@ -62,15 +69,37 @@ template <typename T>
 RECURRENCE::Tower<T>::~Tower() {}
 
 template <typename T>
-void RECURRENCE::Tower<T>::Push(const T& data) {
+void RECURRENCE::Tower<T>::Front(const T& data) {
 	m_queue.push_front(data);
 }
 
 template <typename T>
-T RECURRENCE::Tower<T>::Pop() {
-	const T data = m_queue[0];
+T RECURRENCE::Tower<T>::Front() {
+	const T data = m_queue.front();
 	m_queue.erase(m_queue.begin());
 	return data;
+}
+
+template <typename T>
+void RECURRENCE::Tower<T>::Back(const T& data) {
+	m_queue.push_back(data);
+}
+
+template <typename T>
+T RECURRENCE::Tower<T>::Back() {
+	const T data = m_queue.back();
+	m_queue.erase(m_queue.begin() + m_queue.size() - 1);
+	return data;
+}
+
+template <typename T>
+T RECURRENCE::Tower<T>::First() const {
+	return m_queue.front();
+}
+
+template <typename T>
+T RECURRENCE::Tower<T>::Last() const {
+	return m_queue.back();
 }
 
 template <typename T>
@@ -80,10 +109,18 @@ TOWER_TYPE RECURRENCE::Tower<T>::Type() const {
 
 template <typename T>
 void RECURRENCE::Tower<T>::Print() const {
+	const std::size_t size = m_queue.size();
+	if (size)
+		for (std::size_t i = 0; i < size; ++i)
+			std::cout << m_queue[i] << "  ";
+}
+
+template <typename T>
+void RECURRENCE::Tower<T>::PrintR() const {
 	const int size = m_queue.size();
 	if (size)
 		for (int i = size - 1; i >= 0; --i)
-			std::cout << m_queue[i] << " ";
+			std::cout << m_queue[i] << "  ";
 }
 
 template <typename T>

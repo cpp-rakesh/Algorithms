@@ -48,7 +48,7 @@ template <typename T>
 void RECURRENCE::TowerOfHanoi<T>::m_compute(const int& n, Tower<T>& source, Tower<T>& temp, Tower<T>& target) {
 	if (n >= 0) {
 		m_compute(n - 1, source, target, temp);
-		target.Push(source.Pop());
+		target.Front(source.Front());
 
 		m_print(source, temp, target);
 		
