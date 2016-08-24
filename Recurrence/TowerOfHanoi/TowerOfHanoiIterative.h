@@ -41,13 +41,9 @@ void TowerOfHanoi<T>::Compute(RECURRENCE::Tower<T>& A,
 	int n = static_cast<int>(std::pow(2, A.Size())) - 1;
 	
 	while (1) {
-		if (A.Size() % 2 == 0)
-			m_execute(false, A, B, C);
-		else
-			m_execute(true, A, B, C);
-
+		m_execute(A.Size() % 2, A, B, C);
 		n -= 3;
-
+		
 		if (n < 3)
 			break;
 	}

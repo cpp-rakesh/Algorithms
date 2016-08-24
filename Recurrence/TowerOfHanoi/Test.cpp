@@ -2,20 +2,15 @@
 #include "TowerOfHanoiIterative.h"
 #include <ctime>
 
-void test_recursive() {
-	const int n = 5;
+void test_recursive(const int& n) {
 	RECURRENCE::Tower<int> tower(SOURCE);
 	for (int i = 0; i < n; ++i)
 		tower.Front(i + 1);
-	std::clock_t start = clock();
 	RECURRENCE::TowerOfHanoi<int> hanoi;
 	hanoi.Compute(tower);	
-	std::cout << "Execution time == [" << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "] seconds"
-			  << std::endl;	
 }
 
-void test_iterative() {
-	const int n = 6;	
+void test_iterative(const int& n) {
 	RECURRENCE::Tower<int> A(SOURCE);
 	RECURRENCE::Tower<int> B(TEMP);
 	RECURRENCE::Tower<int> C(TARGET);	
@@ -25,9 +20,21 @@ void test_iterative() {
 	hanoi.Compute(A, B, C);
 }
 
+void test() {
+	int n = 10;
+	std::clock_t start = clock();
+	test_recursive(n);
+	std::cout << "Execution time == [" << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "] seconds"
+			  << std::endl;
+
+	start = clock();
+	test_iterative(n);
+	std::cout << "Execution time == [" << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "] seconds"
+			  << std::endl;	
+}
+
 int main() {
-	//test_recursive();
-	test_iterative();
+	test();
 
 	return 0;
 }
