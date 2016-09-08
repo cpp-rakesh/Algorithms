@@ -31,6 +31,32 @@ std::string RECURRENCE::Multiplication::Multiply(const std::string& A, const std
     return result;
 }
 
+std::deque<int> RECURRENCE::Multiplication::Multiply(const std::deque<int>& A, const std::deque<int>& B) {
+    std::deque<int> result;
+    for (std::size_t i = 0; i < A.size(); ++i) {
+        std::deque<int> result_for_addition;
+        // Adding last zero's
+        for (int k = 0; k < i; ++k)
+            result_for_addition.push_back(0);
+
+        int carry = 0;
+        for (std::size_t j = 0; j < B.size(); ++j) {
+            const int sum = (A[i] * B[j]) + carry;
+            result_for_addition.push_back(sum % 10);
+            carry = sum / 10;
+        }
+
+        while (carry) {
+            result_for_addition.push_back(carry % 10);
+            carry /= 10;
+        }
+        
+        m_add(result_for_addition, result);
+    }
+
+    return result;
+}
+
 void RECURRENCE::Multiplication::m_add(const std::string& A, std::string& B) {
     std::size_t i = 0;
     std::size_t j = 0;
@@ -55,6 +81,34 @@ void RECURRENCE::Multiplication::m_add(const std::string& A, std::string& B) {
     // left over from carry
     while (carry) {
         B.push_back((carry % 10) + '0');
+        carry /= 10;
+    }
+}
+
+void RECURRENCE::Multiplication::m_add(const std::deque<int>& A, std::deque<int>& B) {
+    std::size_t i = 0;
+    std::size_t j = 0;
+    std::size_t carry = 0;
+
+    while (i < A.size() && j < B.size()) {
+        const int sum = A[i] + B[j] + carry;
+        B[j] = (sum % 10);
+        carry = sum / 10;
+        ++i;
+        ++j;
+    }
+
+    // Leftover from A
+    while (i < A.size()) {
+        const int sum = A[i] + carry;
+        B.push_back(sum % 10);
+        carry = sum / 10;
+        ++i;
+    }
+
+    // left over from carry
+    while (carry) {
+        B.push_back(carry % 10);
         carry /= 10;
     }
 }
