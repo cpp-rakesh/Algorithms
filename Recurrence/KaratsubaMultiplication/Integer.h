@@ -14,20 +14,16 @@
 
 class Integer {
 public:
-    // Default constructor
+    // Default Initialization
     Integer();
 
-    // This constructor will take the input string as we see the
-    // number in 12345 order, because we need to add from the last
-    // number, we can save reverse, and when adding carry value it will be
-    // always at back, which will easily save the shift cost.
+    // Initialize with std::string
     Integer(const std::string& data);
 
-    // This construction will take the input as std::vector<int> type.
-    // Normal way
+    // Initialization std::vector<int>
     Integer(const std::vector<int>& data);
 
-    // Normal Integer value intial
+    // Intitialization with int.
     Integer(int data);
 
     // Copy constructor
@@ -39,15 +35,31 @@ public:
     ~Integer();
 
     Integer operator + (const Integer& rhs);
+    Integer operator + (const std::string& rhs);
     Integer operator + (const int& rhs);
 
     void operator += (const Integer& rhs);
+    void operator += (const std::string& rhs);
     void operator += (const int& rhs);
 
+    Integer operator - (const Integer& rhs);
+#if 0    
+    Integer operator - (const std::string& rhs);
+    Integer operator - (const int& rhs);
+
+    void operator -= (const Integer& rhs);
+    void operator -= (const std::string& rhs);
+    void operator -= (const int& rhs);
+#endif
+
+    std::size_t Size() const;
     void Print() const;
 
 private:
-    std::string m_data;  
+    bool        m_sign;
+    std::string m_data;
+
+    void m_subtract(const std::string& A, const std::string& B, std::string& R);
 };
 
 #endif // ALGORITHMS_RECURRENCE_INTEGER_H_

@@ -1,22 +1,20 @@
 #include "Integer.h"
 #include <ctime>
 
-void factorial() {
+void test() {
     std::clock_t start = clock();
-    Integer A(0);
-    Integer B(1);
+    Integer A("1000000000000000000000000000000000");
+    Integer B("100");
 
-    for (int i = 0; i < 50000; ++i) {
-        Integer C = A + B;
-        A = B;
-        B = C;
-    }
+    for (int i = 0; i < 100000000; ++i)
+        A += B;
+
+    A.Print();
     printf("Execution time == [%.8f] seconds\n", (clock() - start) / static_cast<double>(CLOCKS_PER_SEC));
-    B.Print();
 }
 
 int main() {
-    factorial();
+    test();
 
     return 0;
 }
