@@ -2,9 +2,9 @@
 
 int main() {
     Integer A("9");
-    Integer B("1090");
+    Integer B("1009");
 
-    Integer C = B - A;
+    Integer C = A - B;
 
     A.Print();
     B.Print();
