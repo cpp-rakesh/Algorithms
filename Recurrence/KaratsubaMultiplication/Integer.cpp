@@ -1,4 +1,5 @@
 #include "Integer.h"
+#include <algorithm>
 
 Integer::Integer() : m_sign(false) {}
 
@@ -15,6 +16,7 @@ Integer::Integer(const std::vector<int>& data) : m_sign(false) {
 Integer::Integer(int data) : m_sign(false) {
     if (data == 0)
         m_data.push_back('0');
+    
     while (data) {
         m_data.push_back((data % 10) + '0');
         data /= 10;
@@ -29,6 +31,7 @@ Integer::Integer(const Integer& rhs) {
 Integer& Integer::operator = (const Integer& rhs) {
     m_data = rhs.m_data;
     m_sign = rhs.m_sign;
+    
     return *this;
 }
 
@@ -84,6 +87,7 @@ Integer Integer::operator + (const std::string& rhs) {
         const int sum = carry + (m_data[i++] - '0');
         number.m_data.push_back((sum % 10) + '0');
         carry = sum / 10;
+
         if (carry == 0)
             break;
     }
@@ -132,6 +136,7 @@ void Integer::operator += (const Integer& rhs) {
         const int sum = carry + (m_data[i] - '0');
         m_data[i++] = (sum % 10) + '0';
         carry = sum / 10;
+
         if (carry == 0)
             break;
     }
@@ -163,6 +168,7 @@ void Integer::operator += (const std::string& rhs) {
         const int sum = carry + (m_data[i] - '0');
         m_data[i++] = (sum % 10) + '0';
         carry = sum / 10;
+
         if (carry == 0)
             break;
     }
@@ -278,6 +284,7 @@ void Integer::operator -= (const std::string& rhs) {
 
 void Integer::operator -= (const int& rhs) {
     Integer temp(rhs);
+    
     if (*this == temp) {
         m_data.erase(m_data.begin(), m_data.end());
         m_data.push_back('0');
@@ -288,6 +295,103 @@ void Integer::operator -= (const int& rhs) {
         m_data = temp.m_data;
         m_sign = true;
     }    
+}
+
+Integer Integer::operator * (const Integer& rhs) {
+    Integer number;
+    
+    for (std::size_t i = 0; i < m_data.size(); ++i) {
+        std::string result;
+
+        for (std::size_t j = 0; j < i; ++j)
+            result.push_back('0');
+
+        int carry = 0;
+
+        for (std::size_t j = 0; j < rhs.m_data.size(); ++j) {
+            const int sum = carry + ((m_data[i] - '0') * (rhs.m_data[j] - '0'));
+            result.push_back((sum % 10) + '0');
+            carry = sum / 10;
+        }
+
+        while (carry) {
+            result.push_back((carry % 10) + '0');
+            carry /= 10;
+        }
+
+        std::reverse(result.begin(), result.end());
+        number += result;
+    }
+
+    return number;
+}
+
+Integer Integer::operator * (const std::string& rhs) {
+    Integer number;
+
+    for (std::size_t i = 0; i < m_data.size(); ++i) {
+        std::string result;
+
+        for (std::size_t j = 0; j < i; ++j)
+            result.push_back('0');
+
+        int carry = 0;
+
+        for (int j = rhs.size() - 1; j >= 0; --j) {
+            const int sum = carry + ((m_data[i] - '0') * (rhs[j] - '0'));
+            result.push_back((sum % 10) + '0');
+            carry = sum / 10;
+        }
+
+        while (carry) {
+            result.push_back((carry % 10) + '0');
+            carry /= 10;
+        }
+
+        std::reverse(result.begin(), result.end());
+        number += result;
+    }
+
+    return number;
+}
+
+Integer Integer::operator * (const int& rhs) {
+    Integer number;
+
+    for (std::size_t i = 0; i < m_data.size(); ++i) {
+        std::string result;
+
+        for (std::size_t j = 0; j < i; ++j)
+            result.push_back('0');
+
+        int carry = 0;
+
+        const int sum = carry + ((m_data[i] - '0') * rhs);
+        result.push_back((sum % 10) + '0');
+        carry = sum / 10;
+
+        while (carry) {
+            result.push_back((carry % 10) + '0');
+            carry /= 10;
+        }
+
+        std::reverse(result.begin(), result.end());
+        number += result;
+    }
+
+    return number;
+}
+
+void Integer::operator *= (const Integer& rhs) {
+    *this = *this * rhs;
+}
+
+void Integer::operator *= (const std::string& rhs) {
+    *this = *this * rhs;
+}
+
+void Integer::operator *= (const int& rhs) {
+    *this = *this * rhs;
 }
 
 bool Integer::operator < (const Integer& rhs) {
@@ -332,6 +436,7 @@ bool Integer::operator == (const Integer& rhs) {
 std::size_t Integer::Size() const {
     return m_data.size();
 }
+
 void Integer::Print() const {
     if (m_sign)
         printf("-");

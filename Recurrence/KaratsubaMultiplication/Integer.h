@@ -34,21 +34,35 @@ public:
 
     ~Integer();
 
+    // Addition functions
     Integer operator + (const Integer& rhs);
     Integer operator + (const std::string& rhs);
     Integer operator + (const int& rhs);
 
+    // += functions
     void operator += (const Integer& rhs);
     void operator += (const std::string& rhs);
     void operator += (const int& rhs);
 
+    // Subtraction functions
     Integer operator - (const Integer& rhs);
     Integer operator - (const std::string& rhs);
     Integer operator - (const int& rhs);
 
+    // -= functions
     void operator -= (const Integer& rhs);
     void operator -= (const std::string& rhs);
     void operator -= (const int& rhs);
+
+    // Multiplication functions
+    Integer operator * (const Integer& rhs);
+    Integer operator * (const std::string& rhs);
+    Integer operator * (const int& rhs);
+
+    // *= functions
+    void operator *= (const Integer& rhs);
+    void operator *= (const std::string& rhs);
+    void operator *= (const int& rhs);
 
     // Comparission operators
     bool operator < (const Integer& rhs);
