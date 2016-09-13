@@ -442,7 +442,16 @@ void Integer::Print() const {
         printf("-");
     for (int i = m_data.length() - 1; i >= 0; --i)
         printf("%c", m_data[i]);
-    printf("\n");
+}
+
+std::string Integer::Get() const {
+    std::string data = m_data;
+    std::reverse(data.begin(), data.end());
+    return data;
+}
+
+std::string Integer::GetReverse() const {
+    return m_data;
 }
 
 void Integer::m_subtract(std::string& A, const std::string& B) {

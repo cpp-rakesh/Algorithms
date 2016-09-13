@@ -71,6 +71,8 @@ public:
 
     std::size_t Size() const;
     void Print() const;
+    std::string Get() const;
+    std::string GetReverse() const;
 
 private:
     bool        m_sign;
