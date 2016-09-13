@@ -43,14 +43,12 @@ public:
     void operator += (const int& rhs);
 
     Integer operator - (const Integer& rhs);
-#if 0    
     Integer operator - (const std::string& rhs);
     Integer operator - (const int& rhs);
 
     void operator -= (const Integer& rhs);
     void operator -= (const std::string& rhs);
     void operator -= (const int& rhs);
-#endif
 
     // Comparission operators
     bool operator < (const Integer& rhs);
@@ -64,6 +62,11 @@ private:
     bool        m_sign;
     std::string m_data;
 
+    // This function will do the actual subtraction of the data.
+    // When operator -= has been called.
+    void m_subtract(std::string& lhs, const std::string& rhs);
+    // This function will perform the subtraction of the data.
+    // When operator - has been called.
     void m_subtract(const std::string& A, const std::string& B, std::string& R);
 };
 

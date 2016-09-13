@@ -214,6 +214,82 @@ Integer Integer::operator - (const Integer& rhs) {
     }
 }
 
+Integer Integer::operator - (const std::string& rhs) {
+    Integer temp_rhs(rhs);
+    if (*this == temp_rhs) {
+        Integer number(0);
+        return number;
+    } else if (*this > temp_rhs) {
+        Integer number;
+        m_subtract(m_data, temp_rhs.m_data, number.m_data);
+        return number;
+    } else {
+        Integer number;
+        number.m_sign = true;
+        m_subtract(temp_rhs.m_data, m_data, number.m_data);
+        return number;
+    }    
+}
+
+Integer Integer::operator - (const int& rhs) {
+    Integer temp_rhs(rhs);
+    if (*this == temp_rhs) {
+        Integer number(0);
+        return number;
+    } else if (*this > temp_rhs) {
+        Integer number;
+        m_subtract(m_data, temp_rhs.m_data, number.m_data);
+        return number;
+    } else {
+        Integer number;
+        number.m_sign = true;
+        m_subtract(temp_rhs.m_data, m_data, number.m_data);
+        return number;
+    }        
+}
+
+void Integer::operator -= (const Integer& rhs) {
+    if (*this == rhs) {
+        m_data.erase(m_data.begin(), m_data.end());
+        m_data.push_back('0');
+    } else if (*this > rhs) {
+        m_subtract(m_data, rhs.m_data);
+    } else {
+        std::string temp_rhs = rhs.m_data;
+        m_subtract(temp_rhs, m_data);
+        m_data = temp_rhs;
+        m_sign = true;
+    }    
+}
+
+void Integer::operator -= (const std::string& rhs) {
+    Integer temp(rhs);
+    if (*this == temp) {
+        m_data.erase(m_data.begin(), m_data.end());
+        m_data.push_back('0');
+    } else if (*this > temp) {
+        m_subtract(m_data, temp.m_data);
+    } else {
+        m_subtract(temp.m_data, m_data);
+        m_data = temp.m_data;
+        m_sign = true;
+    }    
+}
+
+void Integer::operator -= (const int& rhs) {
+    Integer temp(rhs);
+    if (*this == temp) {
+        m_data.erase(m_data.begin(), m_data.end());
+        m_data.push_back('0');
+    } else if (*this > temp) {
+        m_subtract(m_data, temp.m_data);
+    } else {
+        m_subtract(temp.m_data, m_data);
+        m_data = temp.m_data;
+        m_sign = true;
+    }    
+}
+
 bool Integer::operator < (const Integer& rhs) {
     if (m_data.size() < rhs.m_data.size()) {
         return true;
@@ -264,13 +340,39 @@ void Integer::Print() const {
     printf("\n");
 }
 
+void Integer::m_subtract(std::string& A, const std::string& B) {
+    std::size_t i = 0;
+
+    while (i < A.size() && i < B.size()) {
+        if (A[i] < B[i]) {
+            if (A[i + 1] != '0') {
+                --A[i + 1];
+            } else {
+                std::size_t k = i + 1;
+                while (A[k] == '0' && k < A.size())
+                    --A[k++] = '9';
+                if (A[k] == '1' && A.size() - 1 == k)
+                    A.erase(k);
+                else
+                    --A[k];
+            }
+            const int diff = (10 + A[i] - '0') - (B[i] - '0');
+            A[i] = diff + '0';
+        } else {
+            const int diff = (A[i] - '0') - (B[i] - '0');
+            A[i] = diff + '0';
+        }
+        
+        ++i;
+    }
+}
+
 void Integer::m_subtract(const std::string& A, const std::string& B, std::string& R) {
     std::string TA = A;
     std::size_t i = 0;
-    std::size_t j = 0;
 
-    while (i < TA.size() && j < B.size()) {
-        if (TA[i] < B[j]) {
+    while (i < TA.size() && i < B.size()) {
+        if (TA[i] < B[i]) {
             if (TA[i + 1] != '0') {
                 --TA[i + 1];
             } else {
@@ -288,8 +390,8 @@ void Integer::m_subtract(const std::string& A, const std::string& B, std::string
             const int diff = (TA[i] - '0') - (B[i] - '0');
             R.push_back(diff + '0');
         }
+        
         ++i;
-        ++j;
     }
 
     while (i < TA.size()) {

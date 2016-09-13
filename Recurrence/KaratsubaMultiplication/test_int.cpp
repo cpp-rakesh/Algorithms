@@ -1,13 +1,12 @@
 #include "Integer.h"
 
 int main() {
-    Integer A("94");
-    Integer B("400");
-
-    Integer C = A - B;
-    //A.Print();
-    //B.Print();
-    C.Print();
+    Integer A("100");
+    A.Print();
+    
+    A -= "200000";
+    
+    A.Print();
     
     return 0;
 }
