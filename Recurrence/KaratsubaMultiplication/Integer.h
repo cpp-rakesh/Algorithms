@@ -52,6 +52,11 @@ public:
     void operator -= (const int& rhs);
 #endif
 
+    // Comparission operators
+    bool operator < (const Integer& rhs);
+    bool operator > (const Integer& rhs);
+    bool operator == (const Integer& rhs);
+
     std::size_t Size() const;
     void Print() const;
 

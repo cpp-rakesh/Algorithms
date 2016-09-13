@@ -21,12 +21,14 @@ Integer::Integer(int data) : m_sign(false) {
     }
 }
 
-Integer::Integer(const Integer& rhs) : m_sign(false) {
+Integer::Integer(const Integer& rhs) {
     m_data = rhs.m_data;
+    m_sign = rhs.m_sign;
 }
 
 Integer& Integer::operator = (const Integer& rhs) {
     m_data = rhs.m_data;
+    m_sign = rhs.m_sign;
     return *this;
 }
 
@@ -196,19 +198,59 @@ Integer Integer::operator - (const Integer& rhs) {
     // As the data of the string always stored in the reverse order.
     // For school grade natural arethmatic operations.
     // We need to use string comparission in oposite way.
-    if (m_data == rhs.m_data) {
+
+    if (*this == rhs) {
         Integer number(0);
         return number;
-    } else if (m_data > rhs.m_data) {
+    } else if (*this > rhs) {
+        Integer number;
+        m_subtract(m_data, rhs.m_data, number.m_data);
+        return number;
+    } else {
         Integer number;
         number.m_sign = true;
         m_subtract(rhs.m_data, m_data, number.m_data);
         return number;
-    } else {
-        Integer number;
-        m_subtract(m_data, rhs.m_data, number.m_data);
-        return number;
     }
+}
+
+bool Integer::operator < (const Integer& rhs) {
+    if (m_data.size() < rhs.m_data.size()) {
+        return true;
+    } else if (m_data.size() > rhs.m_data.size()) {
+        return false;
+    } else {
+        for (int i = m_data.size(); i >= 0; --i)
+            if (m_data[i] > rhs.m_data[i])
+                return false;
+    }
+    
+    return true;
+}
+
+bool Integer::operator > (const Integer& rhs) {
+    if (m_data.size() > rhs.m_data.size()) {
+        return true;
+    } else if (m_data.size() < rhs.m_data.size()) {
+        return false;
+    } else {
+        for (int i = m_data.size(); i >= 0; --i)
+            if (m_data[i] < rhs.m_data[i])
+                return false;
+    }
+    
+    return true;
+}
+
+bool Integer::operator == (const Integer& rhs) {
+    if (m_data.size() != rhs.m_data.size())
+        return false;
+
+    for (std::size_t i = 0; i < m_data.size(); ++i)
+        if (m_data[i] != rhs.m_data[i])
+            return false;
+    
+    return true;
 }
 
 std::size_t Integer::Size() const {
@@ -235,8 +277,10 @@ void Integer::m_subtract(const std::string& A, const std::string& B, std::string
                 std::size_t k = i + 1;
                 while (TA[k] == '0' && k < TA.size())
                     --TA[k++] = '9';
-                if (TA[k] == '1')
+                if (TA[k] == '1' && TA.size() - 1 == k)
                     TA.erase(k);
+                else
+                    --TA[k];
             }
             const int diff = (10 + TA[i] - '0') - (B[i] - '0');
             R.push_back(diff + '0');
