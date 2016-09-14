@@ -391,7 +391,17 @@ void Integer::operator *= (const std::string& rhs) {
 }
 
 void Integer::operator *= (const int& rhs) {
-    *this = *this * rhs;
+    int carry = 0;
+    for (std::size_t i = 0; i < m_data.size(); ++i) {
+        const int sum  = carry + ((m_data[i] - '0') * rhs);
+        m_data[i] = (sum % 10) + '0';
+        carry = sum / 10;
+    }
+
+    while (carry) {
+        m_data.push_back((carry % 10) + '0');
+        carry /= 10;
+    }
 }
 
 bool Integer::operator < (const Integer& rhs) {
