@@ -47,52 +47,50 @@ Integer& Integer::operator = (const Integer& rhs) {
 Integer::~Integer() {}
 
 Integer Integer::operator + (const Integer& rhs) {
+    Integer number;
     if (m_sign || rhs.m_sign) {
+        number.m_sign = m_resultant_sign(rhs);
         if (*this == rhs) {
-            return Integer(0);
+            return number;
         } else if (*this > rhs) {
-            Integer number;
             m_subtract(m_data, rhs.m_data, number.m_data);
             return number;
         } else {
-            Integer number;
-            number.m_sign = true;
             m_subtract(rhs.m_data, m_data, number.m_data);
             return number;            
         }
-    } else {
-        Integer number;
-        std::size_t i = 0;
-        std::size_t j = 0;
-        int carry = 0;
-
-        while (i < m_data.size() && j < rhs.m_data.size()) {
-            const int sum = carry + (m_data[i++] - '0' + rhs.m_data[j++] - '0');
-            number.m_data.push_back((sum % 10) + '0');
-            carry = sum / 10;
-        }
-
-        while (i < m_data.size()) {
-            const int sum = carry + (m_data[i++] - '0');
-            number.m_data.push_back((sum % 10) + '0');
-            carry = sum / 10;
-            if (carry == 0)
-                break;
-        }
-
-        while (j < rhs.m_data.size()) {
-            const int sum = carry + (rhs.m_data[j++] - '0');
-            number.m_data.push_back((sum % 10) + '0');
-            carry = sum / 10;
-        }
-
-        while (carry) {
-            number.m_data.push_back(carry% 10 + '0');
-            carry /= 10;
-        }
-
-        return number;
     }
+    
+    std::size_t i = 0;
+    std::size_t j = 0;
+    int carry = 0;
+
+    while (i < m_data.size() && j < rhs.m_data.size()) {
+        const int sum = carry + (m_data[i++] - '0' + rhs.m_data[j++] - '0');
+        number.m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+    }
+
+    while (i < m_data.size()) {
+        const int sum = carry + (m_data[i++] - '0');
+        number.m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+        if (carry == 0)
+            break;
+    }
+
+    while (j < rhs.m_data.size()) {
+        const int sum = carry + (rhs.m_data[j++] - '0');
+        number.m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+    }
+
+    while (carry) {
+        number.m_data.push_back(carry% 10 + '0');
+        carry /= 10;
+    }
+    
+    return number;
 }
 
 Integer Integer::operator + (const std::string& rhs) {
@@ -128,7 +126,7 @@ Integer Integer::operator + (const std::string& rhs) {
     }
 }
 
-Integer Integer::operator + (const int& rhs) {
+Integer Integer::operator + (int rhs) {
     Integer number;
     int carry = rhs;
     for (std::size_t i = 0; i < m_data.size(); ++i) {
@@ -147,48 +145,48 @@ Integer Integer::operator + (const int& rhs) {
 
 void Integer::operator += (const Integer& rhs) {
     if (m_sign || rhs.m_sign) {
+        m_sign = m_resultant_sign(rhs);
         if (*this == rhs) {
             m_data.erase(m_data.begin(), m_data.end());
             m_data.push_back('0');
         } else if (*this > rhs) {
             m_subtract(m_data, rhs.m_data);
         } else {
-            m_sign = true;
             std::string temp_rhs = rhs.m_data;
             m_subtract(temp_rhs, m_data);
             m_data = temp_rhs;
         }
-    } else {
-        std::size_t i = 0;
-        std::size_t j = 0;
-        int carry = 0;
-
-        while (i < m_data.size() && j < rhs.m_data.size()) {
-            const int sum = carry + (m_data[i] - '0') + (rhs.m_data[j++] - '0');
-            m_data[i++] = (sum % 10) + '0';
-            carry = sum / 10;
-        }
-
-        while (i < m_data.size()) {
-            const int sum = carry + (m_data[i] - '0');
-            m_data[i++] = (sum % 10) + '0';
-            carry = sum / 10;
-
-            if (carry == 0)
-                break;
-        }
-
-        while (j < rhs.m_data.size()) {
-            const int sum = carry + (rhs.m_data[j++] - '0');
-            m_data.push_back((sum % 10) + '0');
-            carry = sum / 10;
-        }
-
-        while (carry) {
-            m_data.push_back((carry % 10) + '0');
-            carry /= 10;
-        }        
     }
+    
+    std::size_t i = 0;
+    std::size_t j = 0;
+    int carry = 0;
+
+    while (i < m_data.size() && j < rhs.m_data.size()) {
+        const int sum = carry + (m_data[i] - '0') + (rhs.m_data[j++] - '0');
+        m_data[i++] = (sum % 10) + '0';
+        carry = sum / 10;
+    }
+
+    while (i < m_data.size()) {
+        const int sum = carry + (m_data[i] - '0');
+        m_data[i++] = (sum % 10) + '0';
+        carry = sum / 10;
+
+        if (carry == 0)
+            break;
+    }
+
+    while (j < rhs.m_data.size()) {
+        const int sum = carry + (rhs.m_data[j++] - '0');
+        m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+    }
+
+    while (carry) {
+        m_data.push_back((carry % 10) + '0');
+        carry /= 10;
+    }        
 }
 
 void Integer::operator += (const std::string& rhs) {
@@ -223,7 +221,7 @@ void Integer::operator += (const std::string& rhs) {
     }
 }
 
-void Integer::operator += (const int& rhs) {
+void Integer::operator += (int rhs) {
     int carry = rhs;
 
     for (std::size_t i = 0; i < m_data.size(); ++i) {
@@ -242,101 +240,30 @@ Integer Integer::operator - (const Integer& rhs) {
     // As the data of the string always stored in the reverse order.
     // For school grade natural arethmatic operations.
     // We need to use string comparission in oposite way.
-
-    if (*this == rhs) {
-        Integer number(0);
-        return number;
-    } else if (*this > rhs) {
-        Integer number;
-        m_subtract(m_data, rhs.m_data, number.m_data);
-        return number;
-    } else {
-        Integer number;
-        number.m_sign = true;
-        m_subtract(rhs.m_data, m_data, number.m_data);
-        return number;
-    }
 }
 
 Integer Integer::operator - (const std::string& rhs) {
-    Integer temp_rhs(rhs);
-    if (*this == temp_rhs) {
-        Integer number(0);
-        return number;
-    } else if (*this > temp_rhs) {
-        Integer number;
-        m_subtract(m_data, temp_rhs.m_data, number.m_data);
-        return number;
-    } else {
-        Integer number;
-        number.m_sign = true;
-        m_subtract(temp_rhs.m_data, m_data, number.m_data);
-        return number;
-    }    
 }
 
-Integer Integer::operator - (const int& rhs) {
-    Integer temp_rhs(rhs);
-    if (*this == temp_rhs) {
-        Integer number(0);
-        return number;
-    } else if (*this > temp_rhs) {
-        Integer number;
-        m_subtract(m_data, temp_rhs.m_data, number.m_data);
-        return number;
-    } else {
-        Integer number;
-        number.m_sign = true;
-        m_subtract(temp_rhs.m_data, m_data, number.m_data);
-        return number;
-    }        
+Integer Integer::operator - (int rhs) {
 }
 
 void Integer::operator -= (const Integer& rhs) {
-    if (*this == rhs) {
-        m_data.erase(m_data.begin(), m_data.end());
-        m_data.push_back('0');
-    } else if (*this > rhs) {
-        m_subtract(m_data, rhs.m_data);
-    } else {
-        std::string temp_rhs = rhs.m_data;
-        m_subtract(temp_rhs, m_data);
-        m_data = temp_rhs;
-        m_sign = true;
-    }    
 }
 
 void Integer::operator -= (const std::string& rhs) {
-    Integer temp(rhs);
-    if (*this == temp) {
-        m_data.erase(m_data.begin(), m_data.end());
-        m_data.push_back('0');
-    } else if (*this > temp) {
-        m_subtract(m_data, temp.m_data);
-    } else {
-        m_subtract(temp.m_data, m_data);
-        m_data = temp.m_data;
-        m_sign = true;
-    }    
 }
 
-void Integer::operator -= (const int& rhs) {
-    Integer temp(rhs);
-    
-    if (*this == temp) {
-        m_data.erase(m_data.begin(), m_data.end());
-        m_data.push_back('0');
-    } else if (*this > temp) {
-        m_subtract(m_data, temp.m_data);
-    } else {
-        m_subtract(temp.m_data, m_data);
-        m_data = temp.m_data;
-        m_sign = true;
-    }    
+void Integer::operator -= (int rhs) {
 }
 
 Integer Integer::operator * (const Integer& rhs) {
     Integer number;
+
+    if (m_sign && rhs.m_sign)
+        number.m_sign = false;
+    else if (m_sign || rhs.m_sign)
+        number.m_sign = true;
     
     for (std::size_t i = 0; i < m_data.size(); ++i) {
         std::string result;
@@ -366,7 +293,19 @@ Integer Integer::operator * (const Integer& rhs) {
 
 Integer Integer::operator * (const std::string& rhs) {
     Integer number;
+    int stop = 0;
+    bool sign = false;
 
+    if (rhs[0] == '0') {
+        sign = true;
+        ++stop;
+    }
+
+    if (m_sign && sign)
+        m_sign = false;
+    else if (m_sign || sign)
+        m_sign = true;
+    
     for (std::size_t i = 0; i < m_data.size(); ++i) {
         std::string result;
 
@@ -375,7 +314,7 @@ Integer Integer::operator * (const std::string& rhs) {
 
         int carry = 0;
 
-        for (int j = rhs.size() - 1; j >= 0; --j) {
+        for (int j = rhs.size() - 1; j >= stop; --j) {
             const int sum = carry + ((m_data[i] - '0') * (rhs[j] - '0'));
             result.push_back((sum % 10) + '0');
             carry = sum / 10;
@@ -393,9 +332,20 @@ Integer Integer::operator * (const std::string& rhs) {
     return number;
 }
 
-Integer Integer::operator * (const int& rhs) {
+Integer Integer::operator * (int rhs) {
     Integer number;
+    bool sign = false;
 
+    if (rhs < 0) {
+        sign = true;
+        rhs *= -1;
+    }
+
+    if (m_sign && sign)
+        m_sign = false;
+    else if (m_sign || sign)
+        m_sign = true;
+    
     for (std::size_t i = 0; i < m_data.size(); ++i) {
         std::string result;
 
@@ -421,25 +371,12 @@ Integer Integer::operator * (const int& rhs) {
 }
 
 void Integer::operator *= (const Integer& rhs) {
-    *this = *this * rhs;
 }
 
 void Integer::operator *= (const std::string& rhs) {
-    *this = *this * rhs;
 }
 
-void Integer::operator *= (const int& rhs) {
-    int carry = 0;
-    for (std::size_t i = 0; i < m_data.size(); ++i) {
-        const int sum  = carry + ((m_data[i] - '0') * rhs);
-        m_data[i] = (sum % 10) + '0';
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        m_data.push_back((carry % 10) + '0');
-        carry /= 10;
-    }
+void Integer::operator *= (int rhs) {
 }
 
 bool Integer::operator < (const Integer& rhs) {
@@ -448,12 +385,13 @@ bool Integer::operator < (const Integer& rhs) {
     } else if (m_data.size() > rhs.m_data.size()) {
         return false;
     } else {
-        for (int i = m_data.size(); i >= 0; --i)
-            if (m_data[i] > rhs.m_data[i])
-                return false;
+        for (int i = m_data.size() - 1; i >= 0; --i)
+            if (m_data[i] != rhs.m_data[i])
+                if (m_data[i] < rhs.m_data[i])
+                    return true;
+                else
+                    return false;
     }
-    
-    return true;
 }
 
 bool Integer::operator > (const Integer& rhs) {
@@ -462,22 +400,26 @@ bool Integer::operator > (const Integer& rhs) {
     } else if (m_data.size() < rhs.m_data.size()) {
         return false;
     } else {
-        for (int i = m_data.size(); i >= 0; --i)
-            if (m_data[i] < rhs.m_data[i])
-                return false;
+        for (int i = m_data.size() - 1; i >= 0; --i)
+            if (m_data[i] != rhs.m_data[i])
+                if (m_data[i] > rhs.m_data[i])
+                    return true;
+                else
+                    return false;
     }
-    
-    return true;
 }
 
 bool Integer::operator == (const Integer& rhs) {
-    if (m_data.size() != rhs.m_data.size())
+    if (m_sign != rhs.m_sign)
         return false;
+    if (m_data.size() != rhs.m_data.size()) {
+        return false;
+    } else {
+        for (std::size_t i = 0; i < m_data.size(); ++i)
+            if (m_data[i] != rhs.m_data[i])
+                return false;
+    }
 
-    for (std::size_t i = 0; i < m_data.size(); ++i)
-        if (m_data[i] != rhs.m_data[i])
-            return false;
-    
     return true;
 }
 
@@ -557,7 +499,19 @@ void Integer::m_subtract(const std::string& A, const std::string& B, std::string
         ++i;
     }
 
-    while (i < TA.size()) {
+    while (i < TA.size())
         R.push_back(TA[i++]);
-    }
+}
+
+bool Integer::m_resultant_sign(const Integer& rhs) {
+    if (m_sign && rhs.m_sign)
+        return true;
+
+    if (m_sign == false && rhs.m_sign == false)
+        return false;
+
+    if (*this > rhs)
+        return m_sign;
+    else if (*this < rhs)
+        return rhs.m_sign;
 }
