@@ -78,20 +78,12 @@ private:
     bool        m_sign;
     std::string m_data;
 
-    // A generic addition function.
-    Integer m_add_return(const Integer& rhs);
-    void m_add(const Integer& rhs);
-
     // This function will do the actual subtraction of the data.
     // When operator -= has been called.
     void m_subtract(std::string& lhs, const std::string& rhs);
     // This function will perform the subtraction of the data.
     // When operator - has been called.
     void m_subtract(const std::string& A, const std::string& B, std::string& R);
-
-    // General function for multiplication
-    Integer m_multiply_return(const Integer& rhs);
-    void m_multiply(const Integer& rhs);
 };
 
 #endif // ALGORITHMS_RECURRENCE_INTEGER_H_
