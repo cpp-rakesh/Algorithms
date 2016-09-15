@@ -78,6 +78,14 @@ private:
     bool        m_sign;
     std::string m_data;
 
+    Integer m_add_return(const Integer& rhs);
+    Integer m_add_return(const std::string& rhs);
+    Integer m_add_return(int rhs);
+
+    void m_add(const Integer& rhs);
+    void m_add(const std::string& rhs);
+    void m_add(int rhs);
+
     // This function will do the actual subtraction of the data.
     // When operator -= has been called.
     void m_subtract(std::string& lhs, const std::string& rhs);
