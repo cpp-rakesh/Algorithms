@@ -4,7 +4,12 @@
 Integer::Integer() : m_sign(false) {}
 
 Integer::Integer(const std::string& data) : m_sign(false) {
-    for (int i = data.size() - 1; i >= 0; --i)
+    int stop = 0;
+    if (data[0] == '-') {
+        m_sign = true;
+        ++stop;
+    }
+    for (int i = data.size() - 1; i >= stop; --i)
         m_data.push_back(data[i]);
 }
 
@@ -14,9 +19,13 @@ Integer::Integer(const std::vector<int>& data) : m_sign(false) {
 }
 
 Integer::Integer(int data) : m_sign(false) {
-    if (data == 0)
+    if (data == 0) {
         m_data.push_back('0');
-    
+    } else if (data < 0) {
+        data *= -1;
+        m_sign = true;
+    }
+        
     while (data) {
         m_data.push_back((data % 10) + '0');
         data /= 10;
@@ -38,166 +47,27 @@ Integer& Integer::operator = (const Integer& rhs) {
 Integer::~Integer() {}
 
 Integer Integer::operator + (const Integer& rhs) {
-    Integer number;
-    std::size_t i = 0;
-    std::size_t j = 0;
-    int carry = 0;
-
-    while (i < m_data.size() && j < rhs.m_data.size()) {
-        const int sum = carry + (m_data[i++] - '0' + rhs.m_data[j++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (i < m_data.size()) {
-        const int sum = carry + (m_data[i++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-        if (carry == 0)
-            break;
-    }
-
-    while (j < rhs.m_data.size()) {
-        const int sum = carry + (rhs.m_data[j++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        number.m_data.push_back(carry% 10 + '0');
-        carry /= 10;
-    }
-
-    return number;
+    return m_add_return(rhs);
 }
 
 Integer Integer::operator + (const std::string& rhs) {
-    Integer number;
-    std::size_t i = 0;
-    int j = rhs.size() - 1;
-    int carry = 0;
-
-    while (i < m_data.size() && j >= 0) {
-        const int sum = carry + (m_data[i++] - '0') + (rhs[j--]);
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (i < m_data.size()) {
-        const int sum = carry + (m_data[i++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-
-        if (carry == 0)
-            break;
-    }
-
-    while (j >= 0) {
-        const int sum = carry + (rhs[j--] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;        
-    }
-
-    while (carry) {
-        number.m_data.push_back((carry % 10) + '0');
-        carry /= 10;
-    }
+    return m_add_return(rhs);
 }
 
 Integer Integer::operator + (const int& rhs) {
-    Integer number;
-    int carry = rhs;
-    for (std::size_t i = 0; i < m_data.size(); ++i) {
-        const int sum = carry +  m_data[i] - '0';
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        number.m_data.push_back(carry% 10 + '0');
-        carry /= 10;        
-    }
-
-    return number;
+    return m_add_return(rhs);
 }
 
 void Integer::operator += (const Integer& rhs) {
-    std::size_t i = 0;
-    std::size_t j = 0;
-    int carry = 0;
-
-    while (i < m_data.size() && j < rhs.m_data.size()) {
-        const int sum = carry + (m_data[i] - '0') + (rhs.m_data[j++] - '0');
-        m_data[i++] = (sum % 10) + '0';
-        carry = sum / 10;
-    }
-
-    while (i < m_data.size()) {
-        const int sum = carry + (m_data[i] - '0');
-        m_data[i++] = (sum % 10) + '0';
-        carry = sum / 10;
-
-        if (carry == 0)
-            break;
-    }
-
-    while (j < rhs.m_data.size()) {
-        const int sum = carry + (rhs.m_data[j++] - '0');
-        m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        m_data.push_back((carry % 10) + '0');
-        carry /= 10;
-    }
+    m_add(rhs);
 }
 
 void Integer::operator += (const std::string& rhs) {
-    std::size_t i = 0;
-    int j = rhs.size() - 1;
-    int carry = 0;
-
-    while (i < m_data.size() && j >= 0) {
-        const int sum = carry + (m_data[i] - '0') + (rhs[j--] - '0');
-        m_data[i++] = (sum % 10) + '0';
-        carry = sum / 10;
-    }
-
-    while (i < m_data.size()) {
-        const int sum = carry + (m_data[i] - '0');
-        m_data[i++] = (sum % 10) + '0';
-        carry = sum / 10;
-
-        if (carry == 0)
-            break;
-    }
-
-    while (j >= 0) {
-        const int sum = carry + (rhs[j--] - '0');
-        m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        m_data.push_back((carry % 10) + '0');
-        carry /= 10;
-    }
+    m_add(rhs);
 }
 
 void Integer::operator += (const int& rhs) {
-    int carry = rhs;
-
-    for (std::size_t i = 0; i < m_data.size(); ++i) {
-        const int sum = carry + m_data[i] - '0';
-        m_data[i] = (sum % 10) + '0';
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        m_data.push_back((carry % 10) + '0');
-        carry /= 10;
-    }
+    m_add(rhs);
 }
 
 Integer Integer::operator - (const Integer& rhs) {
@@ -298,88 +168,15 @@ void Integer::operator -= (const int& rhs) {
 }
 
 Integer Integer::operator * (const Integer& rhs) {
-    Integer number;
-    
-    for (std::size_t i = 0; i < m_data.size(); ++i) {
-        std::string result;
-
-        for (std::size_t j = 0; j < i; ++j)
-            result.push_back('0');
-
-        int carry = 0;
-
-        for (std::size_t j = 0; j < rhs.m_data.size(); ++j) {
-            const int sum = carry + ((m_data[i] - '0') * (rhs.m_data[j] - '0'));
-            result.push_back((sum % 10) + '0');
-            carry = sum / 10;
-        }
-
-        while (carry) {
-            result.push_back((carry % 10) + '0');
-            carry /= 10;
-        }
-
-        std::reverse(result.begin(), result.end());
-        number += result;
-    }
-
-    return number;
+    return m_multiply_return(rhs);
 }
 
 Integer Integer::operator * (const std::string& rhs) {
-    Integer number;
-
-    for (std::size_t i = 0; i < m_data.size(); ++i) {
-        std::string result;
-
-        for (std::size_t j = 0; j < i; ++j)
-            result.push_back('0');
-
-        int carry = 0;
-
-        for (int j = rhs.size() - 1; j >= 0; --j) {
-            const int sum = carry + ((m_data[i] - '0') * (rhs[j] - '0'));
-            result.push_back((sum % 10) + '0');
-            carry = sum / 10;
-        }
-
-        while (carry) {
-            result.push_back((carry % 10) + '0');
-            carry /= 10;
-        }
-
-        std::reverse(result.begin(), result.end());
-        number += result;
-    }
-
-    return number;
+    return m_multiply_return(rhs);
 }
 
 Integer Integer::operator * (const int& rhs) {
-    Integer number;
-
-    for (std::size_t i = 0; i < m_data.size(); ++i) {
-        std::string result;
-
-        for (std::size_t j = 0; j < i; ++j)
-            result.push_back('0');
-
-        int carry = 0;
-
-        const int sum = carry + ((m_data[i] - '0') * rhs);
-        result.push_back((sum % 10) + '0');
-        carry = sum / 10;
-
-        while (carry) {
-            result.push_back((carry % 10) + '0');
-            carry /= 10;
-        }
-
-        std::reverse(result.begin(), result.end());
-        number += result;
-    }
-
-    return number;
+    return m_multiply_return(rhs);
 }
 
 void Integer::operator *= (const Integer& rhs) {
@@ -464,6 +261,72 @@ std::string Integer::GetReverse() const {
     return m_data;
 }
 
+Integer Integer::m_add_return(const Integer& rhs) {
+    Integer number;
+    std::size_t i = 0;
+    std::size_t j = 0;
+    int carry = 0;
+
+    while (i < m_data.size() && j < rhs.m_data.size()) {
+        const int sum = carry + (m_data[i++] - '0' + rhs.m_data[j++] - '0');
+        number.m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+    }
+
+    while (i < m_data.size()) {
+        const int sum = carry + (m_data[i++] - '0');
+        number.m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+        if (carry == 0)
+            break;
+    }
+
+    while (j < rhs.m_data.size()) {
+        const int sum = carry + (rhs.m_data[j++] - '0');
+        number.m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+    }
+
+    while (carry) {
+        number.m_data.push_back(carry% 10 + '0');
+        carry /= 10;
+    }
+
+    return number;
+}
+
+void Integer::m_add(const Integer& rhs) {
+    std::size_t i = 0;
+    std::size_t j = 0;
+    int carry = 0;
+
+    while (i < m_data.size() && j < rhs.m_data.size()) {
+        const int sum = carry + (m_data[i] - '0') + (rhs.m_data[j++] - '0');
+        m_data[i++] = (sum % 10) + '0';
+        carry = sum / 10;
+    }
+
+    while (i < m_data.size()) {
+        const int sum = carry + (m_data[i] - '0');
+        m_data[i++] = (sum % 10) + '0';
+        carry = sum / 10;
+
+        if (carry == 0)
+            break;
+    }
+
+    while (j < rhs.m_data.size()) {
+        const int sum = carry + (rhs.m_data[j++] - '0');
+        m_data.push_back((sum % 10) + '0');
+        carry = sum / 10;
+    }
+
+    while (carry) {
+        m_data.push_back((carry % 10) + '0');
+        carry /= 10;
+    }
+}
+
 void Integer::m_subtract(std::string& A, const std::string& B) {
     std::size_t i = 0;
 
@@ -521,4 +384,37 @@ void Integer::m_subtract(const std::string& A, const std::string& B, std::string
     while (i < TA.size()) {
         R.push_back(TA[i++]);
     }
+}
+
+Integer Integer::m_multiply_return(const Integer& rhs) {
+    Integer number;
+    
+    for (std::size_t i = 0; i < m_data.size(); ++i) {
+        std::string result;
+
+        for (std::size_t j = 0; j < i; ++j)
+            result.push_back('0');
+
+        int carry = 0;
+
+        for (std::size_t j = 0; j < rhs.m_data.size(); ++j) {
+            const int sum = carry + ((m_data[i] - '0') * (rhs.m_data[j] - '0'));
+            result.push_back((sum % 10) + '0');
+            carry = sum / 10;
+        }
+
+        while (carry) {
+            result.push_back((carry % 10) + '0');
+            carry /= 10;
+        }
+
+        std::reverse(result.begin(), result.end());
+        number += result;
+    }
+
+    return number;
+}
+
+void Integer::m_multiply(const Integer& rhs) {
+    
 }
