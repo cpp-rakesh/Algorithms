@@ -4,7 +4,12 @@
 Integer::Integer() : m_sign(false) {}
 
 Integer::Integer(const std::string& data) : m_sign(false) {
-    for (int i = data.size() - 1; i >= 0; --i)
+    int stop = 0;
+    if (data[0] == '-') {
+        m_sign = true;
+        ++stop;
+    }
+    for (int i = data.size() - 1; i >= stop; --i)
         m_data.push_back(data[i]);
 }
 
@@ -14,8 +19,12 @@ Integer::Integer(const std::vector<int>& data) : m_sign(false) {
 }
 
 Integer::Integer(int data) : m_sign(false) {
-    if (data == 0)
-        m_data.push_back('0');
+    if (data == 0) {
+        m_data.push_back('0'); 
+    } else if (data < 0) {
+        m_sign = true;
+        data = data * -1;
+    }
     
     while (data) {
         m_data.push_back((data % 10) + '0');
@@ -38,37 +47,52 @@ Integer& Integer::operator = (const Integer& rhs) {
 Integer::~Integer() {}
 
 Integer Integer::operator + (const Integer& rhs) {
-    Integer number;
-    std::size_t i = 0;
-    std::size_t j = 0;
-    int carry = 0;
+    if (m_sign || rhs.m_sign) {
+        if (*this == rhs) {
+            return Integer(0);
+        } else if (*this > rhs) {
+            Integer number;
+            m_subtract(m_data, rhs.m_data, number.m_data);
+            return number;
+        } else {
+            Integer number;
+            number.m_sign = true;
+            m_subtract(rhs.m_data, m_data, number.m_data);
+            return number;            
+        }
+    } else {
+        Integer number;
+        std::size_t i = 0;
+        std::size_t j = 0;
+        int carry = 0;
 
-    while (i < m_data.size() && j < rhs.m_data.size()) {
-        const int sum = carry + (m_data[i++] - '0' + rhs.m_data[j++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
+        while (i < m_data.size() && j < rhs.m_data.size()) {
+            const int sum = carry + (m_data[i++] - '0' + rhs.m_data[j++] - '0');
+            number.m_data.push_back((sum % 10) + '0');
+            carry = sum / 10;
+        }
+
+        while (i < m_data.size()) {
+            const int sum = carry + (m_data[i++] - '0');
+            number.m_data.push_back((sum % 10) + '0');
+            carry = sum / 10;
+            if (carry == 0)
+                break;
+        }
+
+        while (j < rhs.m_data.size()) {
+            const int sum = carry + (rhs.m_data[j++] - '0');
+            number.m_data.push_back((sum % 10) + '0');
+            carry = sum / 10;
+        }
+
+        while (carry) {
+            number.m_data.push_back(carry% 10 + '0');
+            carry /= 10;
+        }
+
+        return number;
     }
-
-    while (i < m_data.size()) {
-        const int sum = carry + (m_data[i++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-        if (carry == 0)
-            break;
-    }
-
-    while (j < rhs.m_data.size()) {
-        const int sum = carry + (rhs.m_data[j++] - '0');
-        number.m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
-
-    while (carry) {
-        number.m_data.push_back(carry% 10 + '0');
-        carry /= 10;
-    }
-
-    return number;
 }
 
 Integer Integer::operator + (const std::string& rhs) {
@@ -122,34 +146,48 @@ Integer Integer::operator + (const int& rhs) {
 }
 
 void Integer::operator += (const Integer& rhs) {
-    std::size_t i = 0;
-    std::size_t j = 0;
-    int carry = 0;
+    if (m_sign || rhs.m_sign) {
+        if (*this == rhs) {
+            m_data.erase(m_data.begin(), m_data.end());
+            m_data.push_back('0');
+        } else if (*this > rhs) {
+            m_subtract(m_data, rhs.m_data);
+        } else {
+            m_sign = true;
+            std::string temp_rhs = rhs.m_data;
+            m_subtract(temp_rhs, m_data);
+            m_data = temp_rhs;
+        }
+    } else {
+        std::size_t i = 0;
+        std::size_t j = 0;
+        int carry = 0;
 
-    while (i < m_data.size() && j < rhs.m_data.size()) {
-        const int sum = carry + (m_data[i] - '0') + (rhs.m_data[j++] - '0');
-        m_data[i++] = (sum % 10) + '0';
-        carry = sum / 10;
-    }
+        while (i < m_data.size() && j < rhs.m_data.size()) {
+            const int sum = carry + (m_data[i] - '0') + (rhs.m_data[j++] - '0');
+            m_data[i++] = (sum % 10) + '0';
+            carry = sum / 10;
+        }
 
-    while (i < m_data.size()) {
-        const int sum = carry + (m_data[i] - '0');
-        m_data[i++] = (sum % 10) + '0';
-        carry = sum / 10;
+        while (i < m_data.size()) {
+            const int sum = carry + (m_data[i] - '0');
+            m_data[i++] = (sum % 10) + '0';
+            carry = sum / 10;
 
-        if (carry == 0)
-            break;
-    }
+            if (carry == 0)
+                break;
+        }
 
-    while (j < rhs.m_data.size()) {
-        const int sum = carry + (rhs.m_data[j++] - '0');
-        m_data.push_back((sum % 10) + '0');
-        carry = sum / 10;
-    }
+        while (j < rhs.m_data.size()) {
+            const int sum = carry + (rhs.m_data[j++] - '0');
+            m_data.push_back((sum % 10) + '0');
+            carry = sum / 10;
+        }
 
-    while (carry) {
-        m_data.push_back((carry % 10) + '0');
-        carry /= 10;
+        while (carry) {
+            m_data.push_back((carry % 10) + '0');
+            carry /= 10;
+        }        
     }
 }
 
@@ -452,6 +490,7 @@ void Integer::Print() const {
         printf("-");
     for (int i = m_data.length() - 1; i >= 0; --i)
         printf("%c", m_data[i]);
+    printf("\n");
 }
 
 std::string Integer::Get() const {
