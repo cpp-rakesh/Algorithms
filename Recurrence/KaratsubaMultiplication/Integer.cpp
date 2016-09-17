@@ -159,7 +159,7 @@ void Integer::operator += (const std::string& rhs) {
     if (m_sign && sign) {
         m_sign = true;
         return m_add(rhs, sign);;
-    }
+    }-
 
     std::string temp_rhs;
     if (sign)
@@ -528,6 +528,10 @@ void Integer::Print() const {
 
 std::size_t Integer::Size() const {
     return m_data.size();
+}
+
+std::string Integer::GetReverse() const {
+    return m_data;
 }
 
 Integer Integer::m_add_return(const Integer& rhs) {

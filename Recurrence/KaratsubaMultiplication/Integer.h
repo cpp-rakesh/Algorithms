@@ -43,6 +43,7 @@ public:
 
     void Print() const;
     std::size_t Size() const;
+    std::string GetReverse() const;
 
 private:
     // It will hold the big number;
