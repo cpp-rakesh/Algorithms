@@ -1,8 +1,18 @@
+/*
+  Big integer implementation.
+  Has Kartsuba Multiplication where number goes beyond 60 bytes.
+  Author Rakesh Kumar @ cpp.rakesh@gmail.com
+  Date: Sep 18th, 2016
+ */
+
 #include "Integer.h"
 #include <cstdio>
 
+// Default constructor
 Integer::Integer() : m_sign(false) {}
 
+// Parameterized constructor
+// Initialize with a string
 Integer::Integer(const std::string& data) : m_sign(false) {
     int stop = 0;
     if (data[0] == '-') {
@@ -14,6 +24,8 @@ Integer::Integer(const std::string& data) : m_sign(false) {
         m_data.push_back(data[i]);
 }
 
+// Parameterized constrcutor
+// Initialize class with an int value
 Integer::Integer(int data) : m_sign(false) {
     if (data < 0) {
         m_sign = true;
@@ -26,12 +38,14 @@ Integer::Integer(int data) : m_sign(false) {
     }
 }
 
+// Copy constructor
 Integer::Integer(const Integer& rhs) {
     m_data.erase(m_data.begin(), m_data.end());
     m_sign = rhs.m_sign;
     m_data = rhs.m_data;
 }
 
+// Copy assignment operator
 Integer& Integer::operator = (const Integer& rhs) {
     m_data.erase(m_data.begin(), m_data.end());
     m_sign = rhs.m_sign;
@@ -39,6 +53,8 @@ Integer& Integer::operator = (const Integer& rhs) {
     return *this;
 }
 
+// Overloaded + operator
+// Arugument is class object
 Integer Integer::operator + (const Integer& rhs) {
     if (m_sign == false && rhs.m_sign == false)
         return m_add_return(rhs);
@@ -62,9 +78,11 @@ Integer Integer::operator + (const Integer& rhs) {
     }
 }
 
+// Overloading + operator
+// Arugument is a normal string.
 Integer Integer::operator + (const std::string& rhs) {
     bool sign = false;
-    if (rhs[0] == '0')
+    if (rhs[0] == '-')
         sign = true;
     if (m_sign == false && sign == false)
         return m_add_return(rhs, sign);
@@ -94,6 +112,8 @@ Integer Integer::operator + (const std::string& rhs) {
     }        
 }
 
+// Operator overloading +
+// Arugment is integer
 Integer Integer::operator + (int rhs) {
     int sign = false;
     if (rhs < 0) {
@@ -126,6 +146,8 @@ Integer Integer::operator + (int rhs) {
     }
 }
 
+// Operator overloading +=
+// Arugment is Class Object
 void Integer::operator += (const Integer& rhs) {
     if (m_sign == false && rhs.m_sign == false)
         return m_add(rhs);
@@ -136,7 +158,7 @@ void Integer::operator += (const Integer& rhs) {
     }
 
     if (*this > rhs.m_data) {
-        return m_subtract(m_data, rhs.m_data);
+        m_subtract(m_data, rhs.m_data);
     } else if (*this < rhs.m_data) {
         std::string temp_rhs = rhs.m_data;
         m_subtract(temp_rhs, m_data);
@@ -149,17 +171,20 @@ void Integer::operator += (const Integer& rhs) {
     }    
 }
 
+// Operator overload of +=
+// Argument is normal string not the reversed one.
 void Integer::operator += (const std::string& rhs) {
     bool sign = false;
-    if (rhs[0] == '0')
+    if (rhs[0] == '-')
         sign = true;
+
     if (m_sign == false && sign == false)
         return m_add(rhs, sign);
 
     if (m_sign && sign) {
         m_sign = true;
         return m_add(rhs, sign);;
-    }-
+    }
 
     std::string temp_rhs;
     if (sign)
@@ -180,6 +205,8 @@ void Integer::operator += (const std::string& rhs) {
     }    
 }
 
+// Operator overloading +=
+// Argument type int
 void Integer::operator += (int rhs) {
     int sign = false;
     if (rhs < 0) {
@@ -211,6 +238,8 @@ void Integer::operator += (int rhs) {
     }    
 }
 
+// Operator overloading of -
+// Argument type class object.
 Integer Integer::operator - (const Integer& rhs) {
     if (m_sign == false && rhs.m_sign)
         return m_add_return(rhs);
@@ -228,6 +257,9 @@ Integer Integer::operator - (const Integer& rhs) {
     }
 }
 
+// Operator overloading of -
+// Arugment type std::string normal one "123", not reverse one,
+// which I use for arethmatic operations.
 Integer Integer::operator - (const std::string& rhs) {
     bool sign = false;
     
@@ -256,6 +288,8 @@ Integer Integer::operator - (const std::string& rhs) {
     }    
 }
 
+// Operator overloading of -
+// Argument type int
 Integer Integer::operator - (int rhs) {
     bool sign = false;
     if (rhs < 0) {
@@ -279,6 +313,8 @@ Integer Integer::operator - (int rhs) {
     }
 }
 
+// Operator overloading of -=
+// Argument type class object
 void Integer::operator -= (const Integer& rhs) {
     if (m_sign == false && rhs.m_sign)
         return m_add(rhs);
@@ -297,6 +333,8 @@ void Integer::operator -= (const Integer& rhs) {
     }    
 }
 
+// Operator overloading of -=
+// Argument type std::string normal one
 void Integer::operator -= (const std::string& rhs) {
     bool sign = false;
     if (rhs[0] == '-')
@@ -324,6 +362,8 @@ void Integer::operator -= (const std::string& rhs) {
     }        
 }
 
+// Operator overloading -=
+// Argument type int
 void Integer::operator -= (int rhs) {
     bool sign = false;
     if (rhs < 0) {
@@ -350,6 +390,8 @@ void Integer::operator -= (int rhs) {
     }    
 }
 
+// Operator overloading of *
+// Argument class object
 Integer Integer::operator * (const Integer& rhs) {
     Integer number;
     if (m_sign || rhs.m_sign)
@@ -361,7 +403,7 @@ Integer Integer::operator * (const Integer& rhs) {
 
         // Add 0, as we do in school grade mathematics.
         // while doing mathematics.
-        for (std::size_t j = 0; j < i; ++i)
+        for (std::size_t j = 0; j < i; ++j)
             temp.m_data.push_back('0');
         
         for (std::size_t j = 0; j < rhs.m_data.size(); ++j) {
@@ -381,6 +423,8 @@ Integer Integer::operator * (const Integer& rhs) {
     return number;
 }
 
+// Operator overloading of *
+// Argument type std::string normal orientation
 Integer Integer::operator * (const std::string& rhs) {
     int stop = 0;
     Integer number;
@@ -395,7 +439,7 @@ Integer Integer::operator * (const std::string& rhs) {
 
         // Add 0, as we do in school grade mathematics.
         // while doing mathematics.
-        for (std::size_t j = 0; j < i; ++i)
+        for (std::size_t j = 0; j < i; ++j)
             temp.m_data.push_back('0');
         
         for (int j = rhs.size() - 1; j >= stop; --j) {
@@ -415,6 +459,8 @@ Integer Integer::operator * (const std::string& rhs) {
     return number;
 }
 
+// Operator overloading *
+// Argument type int
 Integer Integer::operator * (int rhs) {
     Integer number;
     if (m_sign || rhs < 0) {
@@ -431,9 +477,16 @@ Integer Integer::operator * (int rhs) {
         carry = mul / 10;
     }
 
+    while (carry) {
+        number.m_data.push_back((carry % 10) + '0');
+        carry /= 10;
+    }
+
     return number;
 }
 
+// Operator overloading *=
+// Argument type class object
 void Integer::operator *= (const Integer& rhs) {
     Integer number;
     if (m_sign || rhs.m_sign)
@@ -445,7 +498,7 @@ void Integer::operator *= (const Integer& rhs) {
 
         // Add 0, as we do in school grade mathematics.
         // while doing mathematics.
-        for (std::size_t j = 0; j < i; ++i)
+        for (std::size_t j = 0; j < i; ++j)
             temp.m_data.push_back('0');
         
         for (std::size_t j = 0; j < rhs.m_data.size(); ++j) {
@@ -465,6 +518,8 @@ void Integer::operator *= (const Integer& rhs) {
     m_data = number.m_data;
 }
 
+// Operator overloading *=
+// Argument type std::string normal one.
 void Integer::operator *= (const std::string& rhs) {
     int stop = 0;
     Integer number;
@@ -479,7 +534,7 @@ void Integer::operator *= (const std::string& rhs) {
 
         // Add 0, as we do in school grade mathematics.
         // while doing mathematics.
-        for (std::size_t j = 0; j < i; ++i)
+        for (std::size_t j = 0; j < i; ++j)
             temp.m_data.push_back('0');
         
         for (int j = rhs.size() - 1; j >= stop; --j) {
@@ -499,6 +554,8 @@ void Integer::operator *= (const std::string& rhs) {
     m_data = number.m_data;
 }
 
+// Operator overloading *=
+// Argument type int
 void Integer::operator *= (int rhs) {
     if (rhs < 0) {
         m_sign = true;
@@ -518,6 +575,7 @@ void Integer::operator *= (int rhs) {
     }
 }
 
+// Print the number
 void Integer::Print() const {
     if (m_sign)
         printf("-");
@@ -526,14 +584,17 @@ void Integer::Print() const {
     printf("\n");
 }
 
+// return the size of the number
 std::size_t Integer::Size() const {
     return m_data.size();
 }
 
+// Get the reverse number
 std::string Integer::GetReverse() const {
     return m_data;
 }
 
+// Add *this + class object
 Integer Integer::m_add_return(const Integer& rhs) {
     Integer number;
     std::size_t i = 0;
@@ -566,6 +627,8 @@ Integer Integer::m_add_return(const Integer& rhs) {
     return number;
 }
 
+// Add two numbers, where arugment is a string type with its sign mentioned
+// is_sign true means it is a negative number else it is a positive number
 Integer Integer::m_add_return(const std::string& rhs, bool is_sign) {
     Integer number;
     int stop = 0;
@@ -602,6 +665,7 @@ Integer Integer::m_add_return(const std::string& rhs, bool is_sign) {
     return number;
 }
 
+// Add two numbers, where argument type is int
 Integer Integer::m_add_return(int rhs) {
     Integer number;
     int carry = rhs;
@@ -620,6 +684,7 @@ Integer Integer::m_add_return(int rhs) {
     return number;
 }
 
+// Add number to the *this, argument type is class object
 void Integer::m_add(const Integer& rhs) {
     std::size_t i = 0;
     std::size_t j = 0;
@@ -635,6 +700,9 @@ void Integer::m_add(const Integer& rhs) {
         const int sum = carry + (m_data[i] - '0');
         m_data[i++] = ((sum % 10) + '0');
         carry = sum / 10;
+
+        if (carry == 0)
+            return;
     }
 
     while (j < rhs.m_data.size()) {
@@ -649,6 +717,7 @@ void Integer::m_add(const Integer& rhs) {
     }
 }
 
+// Add string type argument to the current object.
 void Integer::m_add(const std::string& rhs, bool is_sign) {
     int stop = 0;
     std::size_t i = 0;
@@ -669,6 +738,9 @@ void Integer::m_add(const std::string& rhs, bool is_sign) {
         const int sum = carry + (m_data[i] - '0');
         m_data[i++] = ((sum % 10) + '0');
         carry = sum / 10;
+
+        if (carry == 0)
+            return;
     }
 
     while (j >= stop) {
@@ -683,12 +755,16 @@ void Integer::m_add(const std::string& rhs, bool is_sign) {
     }
 }
 
+// Add integer to the current object.
 void Integer::m_add(int rhs) {
     int carry = rhs;
     for (std::size_t i = 0; i < m_data.size(); ++i) {
         const int sum = carry + (m_data[i] - '0');
         m_data[i] = (sum % 10) + '0';
         carry = sum / 10;
+
+        if (carry == 0)
+            return;
     }
 
     while (carry) {
@@ -697,6 +773,8 @@ void Integer::m_add(int rhs) {
     }
 }
 
+// Subtract A - B and return the result.
+// Argument A and B both are reveresd strings
 Integer Integer::m_subtract_return(const std::string& A, const std::string& B) {
     Integer number;
     std::string TA = A;
@@ -728,6 +806,8 @@ Integer Integer::m_subtract_return(const std::string& A, const std::string& B) {
     return number;
 }
 
+// subtract A - B and store ito the A
+// Both A and B are strings.
 void Integer::m_subtract(std::string& A, const std::string& B) {
     std::size_t i = 0;
 
@@ -750,6 +830,8 @@ void Integer::m_subtract(std::string& A, const std::string& B) {
     }
 }
 
+// If current value > string argument
+// return true else false
 bool Integer::operator > (const std::string& rhs) {
     if (m_data.size() > rhs.size()) {
         return true;
@@ -764,6 +846,8 @@ bool Integer::operator > (const std::string& rhs) {
     return false;
 }
 
+// If current value < string argument
+// return true else false
 bool Integer::operator < (const std::string& rhs) {
     if (m_data.size() < rhs.size()) {
         return true;
@@ -778,6 +862,8 @@ bool Integer::operator < (const std::string& rhs) {
     return false;
 }
 
+// If current value == string arugment
+// return true else false
 bool Integer::operator == (const std::string& rhs) {
     if (m_data.size() != rhs.size())
         return false;
@@ -788,6 +874,8 @@ bool Integer::operator == (const std::string& rhs) {
     return true;
 }
 
+// If current value != string argument
+// return true else false
 bool Integer::operator != (const std::string& rhs) {
     if (m_data.size() != rhs.size())
         return true;
@@ -799,11 +887,13 @@ bool Integer::operator != (const std::string& rhs) {
     return true;
 }
 
+// copy the string data to the result from back to start
 void Integer::m_reverse_copy(const std::string& data, std::string& result, int start_pos) {
     for (int i = data.size() - 1; i >= start_pos; --i)
         result.push_back(data[i]);
 }
 
+// convert the int to string in reverse way
 void Integer::m_convert_to_reverse_string(int data, std::string& result) {
     while (data) {
         result.push_back((data % 10) + '0');
