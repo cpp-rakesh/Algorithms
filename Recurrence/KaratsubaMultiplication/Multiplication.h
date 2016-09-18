@@ -20,12 +20,10 @@ namespace RECURRENCE {
         // numbers multiplication start from the last to the first digit.
         // Even addition and subtraction happens this way only.
         std::string Multiply(const std::string& A, const std::string& B);
-        std::deque<int> Multiply(const std::deque<int>& A, const std::deque<int>& B);        
 
         // First arguement is the const one as just need this to B.
         // Where every time B holds all the result
-        void m_add(const std::string& A, std::string& B);
-        void m_add(const std::deque<int>& A, std::deque<int>& B);
+        void m_add(std::string& A, const std::string& B);
     };
 };
 

@@ -10,9 +10,7 @@
   Date: September 9, 2016.
  */
 
-#include <cstdio>
-#include <string>
-#include <vector>
+#include "Integer.h"
 
 namespace RECURRENCE {
     class Karatsuba {
@@ -23,7 +21,10 @@ namespace RECURRENCE {
         // Two numbers are passed as strings
         // Let the are coming as noraml in this order. 12345 and 12345
         // Last number is positioned at the end of the string.
-        std::string Multiply(const std::string& A, const std::string& B);        
+        Integer Multiply(const Integer& A, const Integer& B);
+
+    private:
+        Integer m_power(int x, int y);
     };  
 };
 
