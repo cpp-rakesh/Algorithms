@@ -16,7 +16,7 @@
 
 namespace RECURRENCE {
     template <typename T>
-    class TowerOfHanoi {
+        class TowerOfHanoi {
     public:
 	TowerOfHanoi();
 	~TowerOfHanoi();

@@ -5,7 +5,7 @@
   It is the implementation of normal school grade mathematics.
   Multiply every digit of second with first and sum all.
   Time complexity is n ^ 2 and addition n times.
- */
+*/
 
 #include <string>
 #include <deque>

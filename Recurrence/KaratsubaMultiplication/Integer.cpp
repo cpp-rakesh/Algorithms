@@ -3,7 +3,7 @@
   Has Kartsuba Multiplication where number goes beyond 60 bytes.
   Author Rakesh Kumar @ cpp.rakesh@gmail.com
   Date: Sep 18th, 2016
- */
+*/
 
 #include "Integer.h"
 #include <cstdio>
@@ -594,7 +594,7 @@ void RECURRENCE::Integer::operator *= (int rhs) {
    As we store data in reverse order for easy mathematical operations
    We need to take care high will return from the last part of the string
    and low will return from first part of the string
- */
+*/
 
 void RECURRENCE::Integer::Split(int size, Integer& high, Integer& low) const {
     const std::size_t length = m_data.size();
