@@ -1,7 +1,7 @@
 /*
   Dynamic Programming Example.
   Pascal Triangle and calculating with binomial coffiecent.
-  
+
   Rakesh Kumar @ 14/08/2017
  */
 
@@ -25,7 +25,7 @@ double binomial(double n, double k) {
         b.push_back(0);
 
     b[0] = 1;
-    
+
     for (double i = 1; i <= n; ++i)
         for (double j = min(i, k); j > 0; --j)
             b[j] += b[j - 1];
