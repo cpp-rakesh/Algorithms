@@ -10,7 +10,7 @@
   Date: September 9, 2016.
  */
 
-#include "Integer.h"
+#include "integer.h"
 
 namespace RECURRENCE {
     class Karatsuba {
@@ -25,7 +25,7 @@ namespace RECURRENCE {
 
     private:
         Integer m_power(int x, int y);
-    };  
+    };
 };
 
 #endif // ALGORITHM_RECURRENCE_KARATSUBA_H_

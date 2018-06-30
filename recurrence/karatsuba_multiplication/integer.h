@@ -68,7 +68,7 @@ namespace RECURRENCE {
 
         std::string m_subtract_return(const std::string& A, const std::string& B);
         void m_subtract(std::string& A, const std::string& B);
-        
+
         bool operator > (const std::string& rhs);
         bool operator < (const std::string& rhs);
         bool operator == (const std::string& rhs);

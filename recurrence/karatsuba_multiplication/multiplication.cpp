@@ -1,4 +1,4 @@
-#include "Multiplication.h"
+#include "multiplication.h"
 #include <cstdio>
 
 RECURRENCE::Multiplication::Multiplication() {}

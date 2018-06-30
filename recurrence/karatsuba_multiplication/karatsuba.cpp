@@ -1,4 +1,4 @@
-#include "Karatsuba.h"
+#include "karatsuba.h"
 
 RECURRENCE::Karatsuba::Karatsuba() {}
 
@@ -31,7 +31,7 @@ RECURRENCE::Integer RECURRENCE::Karatsuba::Multiply(const Integer& A, const Inte
         Integer p2 = m_power(10, m2);
 
         return (z2 * p1) + ((z1 - z2 - z0) * p2) + (z0);
-    }    
+    }
 }
 
 RECURRENCE::Integer RECURRENCE::Karatsuba::m_power(int x, int y) {

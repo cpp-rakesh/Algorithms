@@ -5,7 +5,7 @@
   Date: Sep 18th, 2016
 */
 
-#include "Integer.h"
+#include "integer.h"
 #include <cstdio>
 
 
@@ -20,7 +20,7 @@ RECURRENCE::Integer::Integer(const std::string& data) : m_sign(false) {
         m_sign = true;
         ++stop;
     }
-    
+
     for (int i = data.size() - 1; i >= stop; --i)
         m_data.push_back(data[i]);
 }
@@ -32,7 +32,7 @@ RECURRENCE::Integer::Integer(int data) : m_sign(false) {
         m_sign = true;
         data *= -1;
     }
-    
+
     while (data) {
         m_data.push_back((data % 10) + '0');
         data /= 10;
@@ -866,7 +866,7 @@ bool RECURRENCE::Integer::operator < (const std::string& rhs) {
     } else {
         for (int i = m_data.size() - 1; i >= 0; --i)
             if (m_data[i] < rhs[i])
-                return true;        
+                return true;
     }
 
     return false;
@@ -880,7 +880,7 @@ bool RECURRENCE::Integer::operator == (const std::string& rhs) {
     for (std::size_t i = 0; i < m_data.size(); ++i)
         if (m_data[i] != rhs[i])
             return false;
-    
+
     return true;
 }
 

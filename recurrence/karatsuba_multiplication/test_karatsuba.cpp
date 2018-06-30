@@ -1,6 +1,6 @@
-#include "Karatsuba.h"
-#include "Multiplication.h"
-#include "Integer.h"
+#include "karatsuba.h"
+#include "multiplication.h"
+#include "integer.h"
 #include <cstdlib>
 #include <ctime>
 #include <cstdio>
@@ -27,25 +27,25 @@ void test_kratsuba(const std::string& A, const std::string& B) {
     RECURRENCE::Karatsuba mul;
     RECURRENCE::Integer result = mul.Multiply(A, B);
     printf("Execution time == [%.8f] seconds\n", (clock() - start) / static_cast<double>(CLOCKS_PER_SEC));
-    printf("Result ---------->");    
+    printf("Result ---------->");
     result.Print();
 }
 
 void test() {
-    const int A_LEN = 200;
-    const int B_LEN = 150;
-    
+    const int a_len = 200;
+    const int b_len = 150;
+
     std::string A;
-    for (int i = 0; i < A_LEN; ++i)
+    for (int i = 0; i < a_len; ++i)
         A.push_back(get_random());
 
     std::string B;
-    for (int i = 0; i < B_LEN; ++i)
+    for (int i = 0; i < b_len; ++i)
         B.push_back(get_random());
 
     printf("A == [%s]\n", A.c_str());
-    printf("B == [%s]\n", B.c_str());    
-    
+    printf("B == [%s]\n", B.c_str());
+
     test_multiply_normal(A, B);
     test_kratsuba(A, B);
 }
