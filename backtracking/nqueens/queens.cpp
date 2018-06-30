@@ -1,4 +1,4 @@
-#include "Queens.h"
+#include "queens.h"
 #include <cstdio>
 
 namespace ab = algorithms::backtracking;
@@ -10,14 +10,14 @@ ab::Queens::~Queens() {}
 int ab::Queens::Total(int n) {
     if (n == 0 || n == 1)
         return 1;
-    
+
     m_total_count = 0;
     m_all = (1 << n) - 1;
     m_total(0, 0, 0);
     return m_total_count;
 }
 
-void ab::Queens::ComputeAll(int n) {    
+void ab::Queens::ComputeAll(int n) {
     m_all = n;
     m_total_count = 0;
     for (int i = 0; i < n; ++i)
@@ -28,7 +28,7 @@ void ab::Queens::ComputeAll(int n) {
 
 // Algorithm based on Richard Miller, Backtracking, Bitpattern and Recursion
 void ab::Queens::m_total(int ld, int col, int rd) {
-    
+
     if (col == m_all) {
         ++m_total_count;
         return;
@@ -39,7 +39,7 @@ void ab::Queens::m_total(int ld, int col, int rd) {
         const int bit = pos & -pos;
         pos -= bit;
         m_total((ld | bit) >> 1, col | bit, (rd | bit) << 1);
-    }    
+    }
 }
 
 bool ab::Queens::m_is_valid(int queen_number, int pos) const
@@ -49,7 +49,7 @@ bool ab::Queens::m_is_valid(int queen_number, int pos) const
             m_row_positions[i] - '0' == pos - (queen_number - i) || // Same diagonal
             m_row_positions[i] - '0' == pos + (queen_number - i))   // Same diagonal
             return false;
-    
+
     return true;
 }
 
@@ -79,5 +79,5 @@ void ab::Queens::m_draw_board() {
         }
         printf("|\n");
     }
-    printf("------------------------------------------------------\n");        
+    printf("------------------------------------------------------\n");
 }

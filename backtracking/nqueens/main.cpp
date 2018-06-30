@@ -1,4 +1,4 @@
-#include "Queens.h"
+#include "queens.h"
 #include <cstdio>
 #include <ctime>
 
@@ -9,7 +9,7 @@ void test_get_total() {
         printf("------------------------------------------------\n");
         printf("N == [%d] || Total == [%d]\n", n, queen.Total(n));
         printf("Execution time     == [%.8f] seconds\n", (clock() - start) / static_cast<double>(CLOCKS_PER_SEC));
-        printf("------------------------------------------------\n");       
+        printf("------------------------------------------------\n");
     }
 }
 
@@ -23,6 +23,6 @@ void test_draw_all(int n) {
 int main() {
     //test_get_total();
     test_draw_all(20);
-    
+
     return 0;
 }

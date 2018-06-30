@@ -29,7 +29,7 @@ namespace algorithms {
             int m_all;
             int m_total_count;
             std::string m_row_positions;
-            
+
             void m_total(int ld, int col, int rd);
             bool m_is_valid(int queen_number, int pos) const;
             void m_compute(int k);
