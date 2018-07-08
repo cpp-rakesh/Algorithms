@@ -8,6 +8,7 @@
 #include <cstdio>
 #include <vector>
 #include <cstdlib>
+#include <random>
 
 inline int min(double a, double b) {
     return a < b ? a : b;
@@ -34,7 +35,9 @@ double binomial(double n, double k) {
 }
 
 inline int random(int min, int max) {
-    return min + rand() % (max - min + 1);
+    std::random_device rd;
+    std::uniform_int_distribution<> dt(min, max);
+    return dt(rd);
 }
 
 void test_binomail() {
