@@ -4,11 +4,14 @@
 #include <cstdlib>
 #include <ctime>
 #include <cstdio>
+#include <random>
 
 char get_random() {
     const int MIN = 0;
     const int MAX = 9;
-    return (MIN + rand() % (MAX - MIN) + 1) + '0';
+    std::random_device rd;
+    std::uniform_int_distribution<> dt(MIN, MAX);
+    return dt(rd) + '0';
 }
 
 void test_multiply_normal(const std::string& A, const std::string& B) {
