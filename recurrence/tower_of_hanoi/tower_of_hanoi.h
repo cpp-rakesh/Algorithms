@@ -12,7 +12,7 @@
   Date: August 23rd, 2016
 */
 
-#include "Tower.h"
+#include "tower.h"
 
 namespace RECURRENCE {
     template <typename T>
@@ -20,9 +20,9 @@ namespace RECURRENCE {
     public:
 	TowerOfHanoi();
 	~TowerOfHanoi();
-	
+
 	void Compute(Tower<T> tower);
-	
+
     private:
 	void m_compute(const int &n,
 		       Tower<T>& source,
@@ -62,7 +62,7 @@ void RECURRENCE::TowerOfHanoi<T>::m_compute(const int& n,
 	target.Front(source.Front());
 
 	m_print(source, temp, target);
-		
+
 	m_compute(n - 1, temp, source, target);
     }
 }
@@ -91,7 +91,7 @@ void RECURRENCE::TowerOfHanoi<T>::m_print(const Tower<T>& source,
     std::cout << " >>>>> ";
     m_get_tower(TARGET, source, temp, target).Print();
     std::cout << std::endl;
-    std::cout << "-------------------------------------------------------------" << std::endl;	
+    std::cout << "-------------------------------------------------------------" << std::endl;
 }
 
 #endif // ALGORITHMS_RECURRENCE_TOWER_OF_HANOI_H_
