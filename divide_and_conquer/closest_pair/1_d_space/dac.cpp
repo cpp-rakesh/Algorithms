@@ -1,3 +1,7 @@
+/*
+  Find the closest pair distance from a set S, which has 1 d space points.
+ */
+
 #include <bits/stdc++.h>
 
 const int INF = 1e+8 + 1;
