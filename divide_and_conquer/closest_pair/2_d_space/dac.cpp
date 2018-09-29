@@ -112,7 +112,7 @@ void test_nlgn_n(set& s) {
 }
 
 int main() {
-    const int n = 1e+5;
+    const int n = 1e+4;
     set s1 = get(n);
     set s2 = s1;
     print(s1);
