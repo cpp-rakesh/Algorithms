@@ -93,10 +93,11 @@ int nlgn_lgn(std::vector<int>& p, int s, int e) {
 }
 
 void test_n_2(std::vector<int>& p) {
-    std::clock_t start = std::clock();
+    using clock = std::chrono::steady_clock;
+    clock::time_point start = clock::now();
     printf("(O(n ^ 2)    Closest pair distance == [%d]\n", n_2(p));
     printf("(Execution time == [%lf] seconds\n",
-           (std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC));
+           clock::now() - start);
 }
 
 void test_nlgn_n(std::vector<int>& p) {
@@ -115,7 +116,7 @@ void test_nlgn_lgn(std::vector<int>& p) {
 }
 
 int main() {
-    const int n = 10000;
+    const int n = 1e+5;
     std::vector<int> p1 = get(n);
     std::vector<int> p2 = p1;
     std::vector<int> p3 = p1;
