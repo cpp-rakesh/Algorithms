@@ -5,7 +5,7 @@
 
 #include <bits/stdc++.h>
 
-typedef std::pair<int, int> point;
+typedef std::pair<double, double> point;
 typedef std::vector<point>  set;
 
 double euclidean_distance(point& a,
@@ -14,22 +14,22 @@ double euclidean_distance(point& a,
                      ((a.second - b.second) * (a.second - b.second)));
 }
 
-int random(int s, int e) {
+double random(int s, int e) {
     std::random_device rd;
-    std::uniform_int_distribution<> dt(s, e);
-    return dt(rd);
+    std::uniform_real_distribution<> urd(s, e);
+    return urd(rd);
 }
 
 set get(int n) {
     set s;
     for (int i = 0; i < n; ++i)
-        s.push_back(point(random(1, 1e+4), random(1, 1e+4)));
+        s.emplace_back(point(random(1, 1e+4), random(1, 1e+4)));
     return s;
 }
 
 void print(const set& s) {
     for (std::size_t i = 0; i < s.size(); ++i)
-        printf("%4d. (%8d, %8d)\n", i, s[i].first, s[i].second);
+        printf("%8d. (%16lf, %16lf)\n", i, s[i].first, s[i].second);
 }
 
 /*
@@ -61,8 +61,8 @@ double strip_min(set& s) {
     std::sort(s.begin(), s.end(), [](point a, point b) {
             return a.second < b.second;
         });
-    double min = euclidean_distance(s[1], s[0]);
-    for (std::size_t i = 0; i < s.size(); ++i)
+    double min = euclidean_distance(s[0], s[1]);
+    for (std::size_t i = 0; i < s.size() - 1; ++i)
         for (std::size_t j = i + 1; j < s.size() && (s[j].second - s[i].second) < min; ++j)
             min = std::min(min, euclidean_distance(s[i], s[j]));
 
@@ -93,24 +93,26 @@ double nlgn_n(set& s, int a, int b) {
 }
 
 void test_n_2(set& s) {
-    std::clock_t start = std::clock();
+    using clock = std::chrono::steady_clock;
+    clock::time_point start = clock::now();
     printf("(O(n ^ 2)  Closest pair Euclidean distance == [%lf]\n", n_2(s));
     printf("(Execution time == [%lf] seconds\n",
-           (std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC));
+           std::chrono::duration<double>(clock::now() - start));
 }
 
 void test_nlgn_n(set& s) {
-    std::clock_t start = std::clock();
+    using clock = std::chrono::steady_clock;
+    clock::time_point start = clock::now();
     std::sort(s.begin(), s.end(), [](point a, point b) {
             return a.first < b.first;
         });
     printf("(O(nlgn_n) Closest pair Euclidean distance == [%lf]\n", n_2(s));
     printf("(Execution time == [%lf] seconds\n",
-           (std::clock() - start) / static_cast<double>(CLOCKS_PER_SEC));
+           std::chrono::duration<double>(clock::now() - start));
 }
 
 int main() {
-    const int n = 1e+4;
+    const int n = 1e+5;
     set s1 = get(n);
     set s2 = s1;
     print(s1);
