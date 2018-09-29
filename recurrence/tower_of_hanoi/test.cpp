@@ -1,5 +1,6 @@
 #include "tower_of_hanoi.h"
 #include "tower_of_hanoi_iterative.h"
+#include <chrono>
 #include <ctime>
 
 void test_recursive(const int& n) {
@@ -22,15 +23,16 @@ void test_iterative(const int& n) {
 
 void test() {
     int n = 10;
-    std::clock_t start = clock();
+    using clock = std::chrono::steady_clock;
+    clock::time_point start = clock::now();
     test_recursive(n);
-    std::cout << "Execution time == [" << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "] seconds"
-              << std::endl;
+    printf("Recursive execution time == [%lf]\n",
+           std::chrono::duration<double>(clock::now() - start));
 
-    start = clock();
+    start = clock::now();
     test_iterative(n);
-    std::cout << "Execution time == [" << (clock() - start) / static_cast<double>(CLOCKS_PER_SEC) << "] seconds"
-              << std::endl;
+    printf("Iterative execution time == [%lf]\n",
+           std::chrono::duration<double>(clock::now() - start));
 }
 
 int main() {
