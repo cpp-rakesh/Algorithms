@@ -1,6 +1,5 @@
 #include "queens.h"
 #include <cstdio>
-#include <ctime>
 #include <chrono>
 
 void test_get_total() {
@@ -10,8 +9,8 @@ void test_get_total() {
         clock::time_point start = clock::now();
         printf("------------------------------------------------\n");
         printf("N == [%d] || Total == [%d]\n", n, queen.Total(n));
-        printf("Execution time     == [%16f] seconds\n",
-               std::chrono::duration<double>(clock::now() - start));
+        printf("Execution time     == [%16lf] seconds\n",
+               std::chrono::duration<double>(clock::now() - start).count());
         printf("------------------------------------------------\n");
     }
 }
@@ -21,8 +20,8 @@ void test_draw_all(int n) {
     using clock = std::chrono::steady_clock;
     clock::time_point start = clock::now();
     queen.ComputeAll(n);
-    printf("Execution time     == [%16f] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+    printf("Execution time     == [%16lf] seconds\n",
+           std::chrono::duration<double>(clock::now() - start).count());
 }
 
 int main() {
