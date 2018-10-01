@@ -97,7 +97,7 @@ void test_n_2(std::vector<int>& p) {
     clock::time_point start = clock::now();
     printf("(O(n ^ 2)    Closest pair distance == [%d]\n", n_2(p));
     printf("(Execution time == [%lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+           std::chrono::duration<double>(clock::now() - start).count());
 }
 
 void test_nlgn_n(std::vector<int>& p) {
@@ -105,7 +105,7 @@ void test_nlgn_n(std::vector<int>& p) {
     clock::time_point start = clock::now();
     printf("(O(nlgn_n)   Closest pair distance == [%d]\n", nlgn_n(p));
     printf("(Execution time == [%lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+           std::chrono::duration<double>(clock::now() - start).count());
 }
 
 void test_nlgn_lgn(std::vector<int>& p) {
@@ -114,7 +114,7 @@ void test_nlgn_lgn(std::vector<int>& p) {
     std::sort(p.begin(), p.end());
     printf("(O(nlgn_lgn) Closest pair distance == [%d]\n", nlgn_lgn(p, 0, p.size() - 1));
     printf("(Execution time == [%lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+           std::chrono::duration<double>(clock::now() - start).count());
 }
 
 int main() {

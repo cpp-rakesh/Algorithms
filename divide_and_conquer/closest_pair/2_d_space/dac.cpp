@@ -96,8 +96,8 @@ void test_n_2(set& s) {
     using clock = std::chrono::steady_clock;
     clock::time_point start = clock::now();
     printf("(O(n ^ 2)  Closest pair Euclidean distance == [%lf]\n", n_2(s));
-    printf("(Execution time == [%lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+    printf("(Execution time == [%16lf] seconds\n",
+           std::chrono::duration<double>(clock::now() - start).count());
 }
 
 void test_nlgn_n(set& s) {
@@ -107,8 +107,8 @@ void test_nlgn_n(set& s) {
             return a.first < b.first;
         });
     printf("(O(nlgn_n) Closest pair Euclidean distance == [%lf]\n", n_2(s));
-    printf("(Execution time == [%lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+    printf("(Execution time == [%16lf] seconds\n",
+           std::chrono::duration<double>(clock::now() - start).count());
 }
 
 int main() {

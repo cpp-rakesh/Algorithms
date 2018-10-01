@@ -2,7 +2,6 @@
 #include "multiplication.h"
 #include "integer.h"
 #include <cstdlib>
-#include <ctime>
 #include <cstdio>
 #include <random>
 #include <chrono>
@@ -21,7 +20,7 @@ void test_multiply_normal(const std::string& A, const std::string& B) {
     RECURRENCE::Multiplication mul;
     std::string result = mul.Multiply(A, B);
     printf("Execution time == [%16lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+           std::chrono::duration<double>(clock::now() - start).count());
     printf("Result ---------->");
     for (int i = result.size() - 1; i >= 0; --i)
         printf("%c", result[i]);
@@ -34,7 +33,7 @@ void test_kratsuba(const std::string& A, const std::string& B) {
     RECURRENCE::Karatsuba mul;
     RECURRENCE::Integer result = mul.Multiply(A, B);
     printf("Execution time == [%16lf] seconds\n",
-           std::chrono::duration<double>(clock::now() - start));
+           std::chrono::duration<double>(clock::now() - start).count());
     printf("Result ---------->");
     result.Print();
 }
