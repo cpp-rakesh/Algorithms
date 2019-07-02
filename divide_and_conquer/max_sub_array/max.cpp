@@ -9,10 +9,12 @@
 #define tp std::tuple<int, int, int>
 
 inline void print(const std::vector<int>& v) {
+#if 0
     printf("----------------------------------------------------\n");
     for (const auto& x : v)
         printf("%d ", x);
     printf("\n----------------------------------------------------\n");
+#endif
 }
 
 inline int random(int s, int e) {
@@ -92,15 +94,23 @@ inline tp max_dac(const std::vector<int>&v, int s, int e) {
 }
 
 inline void test() {
-    const std::vector<int> v = get(10);
+    using clock = std::chrono::steady_clock;
+    const std::vector<int> v = get(5000);
     print(v);
+    clock::time_point start = clock::now();
     tp max1 = max_itr(v);
+    clock::time_point end = clock::now();
     printf("Max sub array from [%d] to [%d] == [%d]\n",
            std::get<1>(max1), std::get<2>(max1), std::get<0>(max1));
+    printf("Execution time == [%.2f] seconds\n",
+           std::chrono::duration<double>(end - start).count());
+    start = clock::now();
     tp max2 = max_dac(v, 0, v.size() - 1);
+    end = clock::now();
     printf("Max sub array from [%d] to [%d] == [%d]\n",
            std::get<1>(max2), std::get<2>(max2), std::get<0>(max2));
-
+    printf("Execution time == [%.2f] seconds\n",
+           std::chrono::duration<double>(end - start).count());
 }
 
 int main() {
