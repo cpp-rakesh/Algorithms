@@ -5,6 +5,7 @@
 
 #include "insertion_sort.h"
 #include "merge_sort.h"
+#include "bubble_sort.h"
 #include <bits/stdc++.h>
 
 inline int random(int s, int e) {
@@ -21,12 +22,12 @@ inline std::vector<int> get(int n) {
 }
 
 inline void print(const std::vector<int>& v) {
-    /*
+#if 0
     printf("--------------------------------------------------------------\n");
     for (const auto& x : v)
         printf("%d ", x);
     printf("\n--------------------------------------------------------------\n");
-    */
+#endif
 }
 
 inline void test_insertion_sort(std::vector<int>& v) {
@@ -55,13 +56,28 @@ inline void test_merge_sort(std::vector<int>& v) {
            std::chrono::duration<double>(end - start).count());
 }
 
+inline void test_bubble_sort(std::vector<int>& v) {
+    using clock = std::chrono::steady_clock;
+    print(v);
+
+    BubbleSort<int>  sort;
+    clock::time_point start = clock::now();
+    sort.sort(v);
+    clock::time_point end = clock::now();
+    print(v);
+    printf("Execution time for bubble sort    == [%.2f] seconds\n",
+           std::chrono::duration<double>(end - start).count());
+}
+
 void test() {
-    const int n = 50000;
+    const int n = 10000;
     std::vector<int> v1 = get(n);
     std::vector<int> v2 = v1;
+    std::vector<int> v3 = v1;
 
     test_insertion_sort(v1);
     test_merge_sort(v2);
+    test_bubble_sort(v3);
 }
 
 int main() {
