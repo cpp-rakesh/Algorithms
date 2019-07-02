@@ -6,6 +6,7 @@
 #include "insertion_sort.h"
 #include "merge_sort.h"
 #include "bubble_sort.h"
+#include "heap_sort.h"
 #include <bits/stdc++.h>
 
 inline int random(int s, int e) {
@@ -69,15 +70,31 @@ inline void test_bubble_sort(std::vector<int>& v) {
            std::chrono::duration<double>(end - start).count());
 }
 
+inline void test_heap_sort(std::vector<int>& v) {
+    using clock = std::chrono::steady_clock;
+    print(v);
+
+    HeapSort<int>  sort;
+    clock::time_point start = clock::now();
+    sort.sort(v);
+    clock::time_point end = clock::now();
+    print(v);
+    printf("Execution time for heap sort      == [%.2f] seconds\n",
+           std::chrono::duration<double>(end - start).count());
+}
+
+
 void test() {
-    const int n = 10000;
+    const int n = 90000;
     std::vector<int> v1 = get(n);
     std::vector<int> v2 = v1;
     std::vector<int> v3 = v1;
+    std::vector<int> v4 = v1;
 
     test_insertion_sort(v1);
     test_merge_sort(v2);
     test_bubble_sort(v3);
+    test_heap_sort(v4);
 }
 
 int main() {
