@@ -1,5 +1,5 @@
 /*
-  Insertion sort
+  Heap sort
   02/07/2019
  */
 
