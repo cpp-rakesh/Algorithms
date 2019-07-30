@@ -1,23 +1,28 @@
 #include "bt.h"
 
-int main() {
+void test() {
     BT<int> bt;
-    bt.insert(1);
-    bt.insert(2);
-    bt.insert(3);
-    bt.insert(4);
-    bt.insert(5);
-    bt.insert(6);
-    bt.insert(7);
-    bt.insert(8);
-    bt.insert(9);
-    bt.insert(10);
+    // insert test
+    for (int i = 1; i <= 10; ++i)
+        bt.insert(i);
 
+    // traversal test
     bt.pre_order();
     bt.in_order();
     bt.post_order();
     bt.bfs();
     bt.level();
+
+    // remove test
+    bt.remove(1);
+    bt.level();
+
+    bt.remove(7);
+    bt.level();
+}
+
+int main() {
+    test();
 
     return 0;
 }

@@ -22,12 +22,14 @@ public:
     void post_order() const;
     void bfs() const;
     void level() const;
+    void remove(T val);
 
 private:
     void m_pre_order(Node<T>* node) const;
     void m_in_order(Node<T>* node) const;
     void m_post_order(Node<T>* node) const;
     void m_level(M& m, Node<T>* node, int level) const;
+    Node<T>* m_last_node() const;
 
     Node<T>* m_root;
 };
@@ -72,18 +74,21 @@ void BT<T>::insert(T val) {
 
 template <typename T>
 void BT<T>::pre_order() const {
+    printf("------------- pre  order traversal --------------\n");
     m_pre_order(m_root);
     printf("\n");
 }
 
 template <typename T>
 void BT<T>::in_order() const {
+    printf("------------- in   order traversal --------------\n");
     m_in_order(m_root);
     printf("\n");
 }
 
 template <typename T>
 void BT<T>::post_order() const {
+    printf("------------- post order traversal --------------\n");
     m_post_order(m_root);
     printf("\n");
 }
@@ -107,6 +112,7 @@ void BT<T>::bfs() const {
 
 template <typename T>
 void BT<T>::level() const {
+    printf("------------- level  traversal --------------\n");
     M m;
     m_level(m, m_root, 0);
     for (auto it = m.begin(); it != m.end(); ++it) {
@@ -114,6 +120,41 @@ void BT<T>::level() const {
         for (const auto& x : it->second)
             printf("%d ", x);
         printf("\n-----------------------------------------------\n");
+    }
+}
+
+template <typename T>
+void BT<T>::remove(T val) {
+    if (m_root == nullptr)
+        return;
+    if (m_root->left() == nullptr) {
+        if (m_root->data() == val) {
+            m_root = nullptr;
+            return;
+        }
+    }
+
+    Node<T>* last_node = m_last_node();
+    std::queue<Node<T>* > q;
+    q.push(m_root);
+
+    while(!q.empty()) {
+        Node<T>* node = q.front();
+        q.pop();
+        if (node->data() == val)
+            node->data(last_node->data());
+        if (node->left() != nullptr) {
+            if (node->left() == last_node)
+                node->left(nullptr);
+            else
+                q.push(node->left());
+        }
+        if (node->right() != nullptr) {
+            if (node->right() == last_node)
+                node->right(nullptr);
+            else
+                q.push(node->right());
+        }
     }
 }
 
@@ -151,6 +192,25 @@ void BT<T>::m_level(M& m, Node<T>* node, int level) const {
         m_level(m, node->left(), level + 1);
         m_level(m, node->right(), level + 1);
     }
+}
+
+template <typename T>
+Node<T>* BT<T>::m_last_node() const {
+    Node<T>* temp_node = nullptr;
+
+    if (m_root != nullptr) {
+        std::queue<Node<T>* > q;
+        q.push(m_root);
+
+        while (!q.empty()) {
+            temp_node = q.front();
+            q.pop();
+            if (temp_node->left()) q.push(temp_node->left());
+            if (temp_node->right()) q.push(temp_node->right());
+        }
+    }
+
+    return temp_node;
 }
 
 #endif // ALGORITHMS_TREE_BINARY_BT_H_
