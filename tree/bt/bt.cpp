@@ -71,6 +71,10 @@ public:
         }
     }
 
+    int height() const {
+        return m_height(m_root);
+    }
+
     void pre_order() const {
         m_pre_order(m_root);
         printf("\n");
@@ -181,6 +185,14 @@ private:
         }
     }
 
+    int m_height(Node* node) const {
+        if (node == nullptr)
+            return 0;
+        const int lh = m_height(node->left) + 1;
+        const int rh = m_height(node->right) + 1;
+        return std::max(lh, rh);
+    }
+
     Node* m_root;
 };
 
@@ -194,6 +206,8 @@ int main() {
     bt.remove(7);
 
     bt.level();
+
+    printf("Height of the tree == [%d]\n", bt.height());
 
     return 0;
 }
