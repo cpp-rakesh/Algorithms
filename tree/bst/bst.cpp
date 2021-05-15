@@ -1,131 +1,88 @@
+/*
+  Rakesh Kumar
+  Year of devestating pandemic
+  Never stop learning !!!
+ */
+
 #include <bits/stdc++.h>
 
 struct Node {
-    int data;
-    Node* left;
-    Node* right;
-};
+    Node() {}
+    Node(int val) : val(val) {}
 
-using V = std::vector<int>;
-using M = std::map<int, V>;
+    int val = 0;
+    Node* left = nullptr;
+    Node* right = nullptr;
+};
 
 class BST {
 public:
-    BST() : m_root(nullptr) {}
-    ~BST() {}
-
-    void insert(int val) {
-        Node* node = m_create(val);
-        if (m_root == nullptr) {
-            m_root = node;
-        } else {
-            Node* cur = m_root;
-            while (1) {
-                if (val < cur->data) {
-                    if (cur->left == nullptr) {
-                        cur->left = node;
+    Node* insert(Node* root, int val) {
+        if (root == nullptr)
+            root = new Node(val);
+        else {
+            Node* node = root;
+            while (node) {
+                if (val < node->val) {
+                    if (node->left == nullptr) {
+                        node->left = new Node(val);
                         break;
-                    } else {
-                        cur = cur->left;
-                    }
-                } else if (val > cur->data) {
-                    if (cur->right == nullptr) {
-                        cur->right = node;
-                        break;
-                    } else {
-                        cur = cur->right;
-                    }
+                    } else
+                        node = node->left;
                 } else {
-                    return;
+                    if (node->right == nullptr) {
+                        node->right = new Node(val);
+                        break;
+                    } else
+                        node = node->right;
                 }
             }
         }
+        return root;
     }
 
-    void level() const {
-        M m;
-        m_level(m_root, m, 0);
-        printf("-------------------------------------------\n");
-        for (auto it = m.begin(); it != m.end(); ++it) {
-            for (const auto& x : it->second)
-                printf("%d ", x);
+    void bfs(Node* node) {
+        printf("------------------------------------------------------------\n");
+        printf("                     level order traversal\n");
+        std::queue<Node*> q;
+        q.push(node);
+        while (!q.empty()) {
+            for (int i = static_cast<int>(q.size()); i > 0; --i) {
+                node = q.front(); q.pop();
+                printf("%d ", node->val);
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
+            }
             printf("\n");
         }
-        printf("-------------------------------------------\n");
+        printf("------------------------------------------------------------\n");
     }
-
-    void pre_order() const {
-        m_pre_order(m_root);
-        printf("\n");
-    }
-
-    void in_order() const {
-        m_in_order(m_root);
-        printf("\n");
-    }
-
-    void post_order() const {
-        m_post_order(m_root);
-        printf("\n");
-    }
-
-private:
-    Node* m_create(int val) {
-        Node* node = new Node;
-        node->data = val;
-        node->left = node->right = nullptr;
-
-        return node;
-    }
-
-    void m_level(Node* node, M& m, int level) const {
-        if (node != nullptr) {
-            m[level].push_back(node->data);
-            m_level(node->left, m, level + 1);
-            m_level(node->right, m, level + 1);
-        }
-    }
-
-    void m_pre_order(Node* node) const {
-        if (node != nullptr) {
-            printf("%d ", node->data);
-            m_pre_order(node->left);
-            m_pre_order(node->right);
-        }
-    }
-
-    void m_in_order(Node* node) const {
-        if (node != nullptr) {
-            m_in_order(node->left);
-            printf("%d ", node->data);
-            m_in_order(node->right);
-        }
-    }
-
-    void m_post_order(Node* node) const {
-        if (node != nullptr) {
-            m_post_order(node->left);
-            m_post_order(node->right);
-            printf("%d ", node->data);
-        }
-    }
-
-    Node* m_root;
 };
 
-int main() {
+void test_1() {
     BST bst;
-    bst.insert(200);
-    bst.insert(100);
-    bst.insert(500);
-    bst.insert(180);
-    bst.insert(10);
-    bst.insert(5);
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 60);
+    root = bst.insert(root, 130);
+    root = bst.insert(root, 175);
+    root = bst.insert(root, 165);
+    root = bst.insert(root, 155);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 300);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+}
 
-    bst.level();
-    bst.pre_order();
-    bst.in_order();
-    bst.post_order();
+int main() {
+    test_1();
 
     return 0;
 }
