@@ -83,7 +83,7 @@ public:
     }
 
     Node* build_from_pre_order(const std::vector<int>& v, int upper_bound = INT_MAX) {
-        if (i == v.size() || v[i] > upper_bound)
+        if (i == static_cast<int>(v.size()) || v[i] > upper_bound)
             return nullptr;
         Node* node = new Node(v[i++]);
         node->left = build_from_pre_order(v, node->val);
