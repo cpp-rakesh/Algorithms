@@ -110,12 +110,29 @@ public:
         return root;
     }
 
+    std::vector<int> sort(Node* root, bool reverse) {
+        std::vector<int> r;
+        if (reverse)
+            sort_reverse(root, r);
+        else
+            in_order(root, r);
+        return r;
+    }
+
     void reset(int val) {
         i = val;
     }
 
 private:
     int i = 0;
+
+    void sort_reverse(Node* node, std::vector<int>& v) {
+        if (node == nullptr)
+            return;
+        sort_reverse(node->right, v);
+        v.emplace_back(node->val);
+        sort_reverse(node->left, v);
+    }
 };
 
 inline void print(const std::vector<int>& v) {
@@ -259,13 +276,37 @@ void test_5() {
     bst.bfs(node_from_post_order);
 }
 
+void test_6() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 60);
+    root = bst.insert(root, 130);
+    root = bst.insert(root, 175);
+    root = bst.insert(root, 165);
+    root = bst.insert(root, 155);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 300);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+    print(bst.sort(root, false));
+    print(bst.sort(root, true));
+}
+
 
 int main() {
     //test_1();
     //test_2();
     //test_3();
     //test_4();
-    test_5();
+    //test_5();
+    test_6();
 
     return 0;
 }
