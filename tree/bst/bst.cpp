@@ -81,6 +81,32 @@ public:
         post_order(node->right, v);
         v.emplace_back(node->val);
     }
+
+    Node* build_from_pre_order(const std::vector<int>& v, int upper_bound = INT_MAX) {
+        if (i == v.size() || v[i] > upper_bound)
+            return nullptr;
+        Node* node = new Node(v[i++]);
+        node->left = build_from_pre_order(v, node->val);
+        node->right = build_from_pre_order(v, upper_bound);
+        return node;
+    }
+
+    Node* build_from_in_order(const std::vector<int>& v, int s = 0, int e = 0) {
+        if (s > e)
+            return nullptr;
+        const int mid = (s + e) >> 1;
+        Node* root = new Node(v[mid]);
+        root->left = build_from_in_order(v, s, mid - 1);
+        root->right = build_from_in_order(v, mid + 1, e);
+        return root;
+    }
+
+    void reset() {
+        i = 0;
+    }
+
+private:
+    std::size_t i = 0;
 };
 
 inline void print(const std::vector<int>& v) {
@@ -145,9 +171,64 @@ void test_2() {
     print(v3);
 }
 
+void test_3() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 60);
+    root = bst.insert(root, 130);
+    root = bst.insert(root, 175);
+    root = bst.insert(root, 165);
+    root = bst.insert(root, 155);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 300);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+    std::vector<int> v;
+    bst.pre_order(root, v);
+    print(v);
+    Node* node_from_pre_order = bst.build_from_pre_order(v);
+    bst.bfs(node_from_pre_order);
+}
+
+void test_4() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 60);
+    root = bst.insert(root, 130);
+    root = bst.insert(root, 175);
+    root = bst.insert(root, 165);
+    root = bst.insert(root, 155);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 300);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+    std::vector<int> v;
+    bst.in_order(root, v);
+    print(v);
+    Node* node_from_in_order = bst.build_from_in_order(v, 0, static_cast<int>(v.size()) - 1);
+    bst.bfs(node_from_in_order);
+}
+
+
 int main() {
     //test_1();
-    test_2();
+    //test_2();
+    //test_3();
+    test_4();
 
     return 0;
 }
