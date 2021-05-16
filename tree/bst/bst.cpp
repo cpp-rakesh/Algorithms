@@ -101,12 +101,21 @@ public:
         return root;
     }
 
-    void reset() {
-        i = 0;
+    Node* build_from_post_order(const std::vector<int>& v, int lower_bound = INT_MIN) {
+        if (i == -1 || v[i] < lower_bound)
+            return nullptr;
+        Node* root = new Node(v[i--]);
+        root->right = build_from_post_order(v, root->val);
+        root->left = build_from_post_order(v, lower_bound);
+        return root;
+    }
+
+    void reset(int val) {
+        i = val;
     }
 
 private:
-    std::size_t i = 0;
+    int i = 0;
 };
 
 inline void print(const std::vector<int>& v) {
@@ -223,12 +232,40 @@ void test_4() {
     bst.bfs(node_from_in_order);
 }
 
+void test_5() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 60);
+    root = bst.insert(root, 130);
+    root = bst.insert(root, 175);
+    root = bst.insert(root, 165);
+    root = bst.insert(root, 155);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 300);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+    std::vector<int> v;
+    bst.post_order(root, v);
+    print(v);
+    bst.reset(v.size() - 1);
+    Node* node_from_post_order = bst.build_from_post_order(v);
+    bst.bfs(node_from_post_order);
+}
+
 
 int main() {
     //test_1();
     //test_2();
     //test_3();
-    test_4();
+    //test_4();
+    test_5();
 
     return 0;
 }
