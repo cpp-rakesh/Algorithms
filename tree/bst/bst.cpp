@@ -57,7 +57,38 @@ public:
         }
         printf("------------------------------------------------------------\n");
     }
+
+    void pre_order(Node* node, std::vector<int>& v) {
+        if (node == nullptr)
+            return;
+        v.emplace_back(node->val);
+        pre_order(node->left, v);
+        pre_order(node->right, v);
+    }
+
+    void in_order(Node* node, std::vector<int>& v) {
+        if (node == nullptr)
+            return;
+        in_order(node->left, v);
+        v.emplace_back(node->val);
+        in_order(node->right, v);
+    }
+
+    void post_order(Node* node, std::vector<int>& v) {
+        if (node == nullptr)
+            return;
+        post_order(node->left, v);
+        post_order(node->right, v);
+        v.emplace_back(node->val);
+    }
 };
+
+inline void print(const std::vector<int>& v) {
+    printf("------------------------------------------------------------\n");
+    for (int e : v)
+        printf("%d ", e);
+    printf("\n------------------------------------------------------------\n");
+}
 
 void test_1() {
     BST bst;
@@ -81,8 +112,42 @@ void test_1() {
     bst.bfs(root);
 }
 
+void test_2() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 60);
+    root = bst.insert(root, 130);
+    root = bst.insert(root, 175);
+    root = bst.insert(root, 165);
+    root = bst.insert(root, 155);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 300);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+    std::vector<int> v1;
+    printf("               pre order traversal\n");
+    bst.pre_order(root, v1);
+    print(v1);
+    std::vector<int> v2;
+    printf("               in order traversal\n");
+    bst.in_order(root, v2);
+    print(v2);
+    std::vector<int> v3;
+    printf("               post order traversal\n");
+    bst.post_order(root, v3);
+    print(v3);
+}
+
 int main() {
-    test_1();
+    //test_1();
+    test_2();
 
     return 0;
 }
