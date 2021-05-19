@@ -119,6 +119,12 @@ public:
         return r;
     }
 
+    int sum(Node* root) {
+        if (root == nullptr)
+            return 0;
+        return root->val + sum(root->left) + sum(root->right);
+    }
+
     void reset(int val) {
         i = val;
     }
@@ -299,6 +305,29 @@ void test_6() {
     print(bst.sort(root, true));
 }
 
+void test_7() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    bst.bfs(root);
+    printf("sum of all nodes == [%d]\n", bst.sum(root));
+}
+
+void test_8() {
+    BST bst;
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    root->left->right = new Node(5);
+    root->right->left = new Node(6);
+    root->right->right = new Node(7);
+    bst.bfs(root);
+    printf("sum of all nodes == [%d]\n", bst.sum(root));
+}
+
 
 int main() {
     //test_1();
@@ -306,7 +335,9 @@ int main() {
     //test_3();
     //test_4();
     //test_5();
-    test_6();
+    //test_6();
+    //test_7();
+    test_8();
 
     return 0;
 }
