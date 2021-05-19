@@ -125,6 +125,14 @@ public:
         return root->val + sum(root->left) + sum(root->right);
     }
 
+    int largest_subtree_sum(Node* root, int& res)  {
+        if (root == nullptr)
+            return 0;
+        const int curr_sum = root->val + largest_subtree_sum(root->left, res) + largest_subtree_sum(root->right, res);
+        res = std::max(curr_sum, res);
+        return curr_sum;
+    }
+
     void reset(int val) {
         i = val;
     }
@@ -328,6 +336,30 @@ void test_8() {
     printf("sum of all nodes == [%d]\n", bst.sum(root));
 }
 
+void test_9() {
+    BST bst;
+    Node* root = new Node(1);
+    root->left = new Node(2);
+    root->right = new Node(-3);
+    bst.bfs(root);
+    int res = INT_MIN;
+    bst.largest_subtree_sum(root, res);
+    printf("largest subtree sum == [%d]\n", res);
+}
+
+void test_10() {
+    BST bst;
+    Node* root = new Node(1);
+    root->left = new Node(-2);
+    root->right = new Node(3);
+    root->left->left = new Node(4);
+    bst.bfs(root);
+    printf("sum of tree         == [%d]\n", bst.sum(root));
+    int res = INT_MIN;
+    bst.largest_subtree_sum(root, res);
+    printf("largest subtree sum == [%d]\n", res);
+}
+
 
 int main() {
     //test_1();
@@ -337,7 +369,9 @@ int main() {
     //test_5();
     //test_6();
     //test_7();
-    test_8();
+    //test_8();
+    //test_9();
+    test_10();
 
     return 0;
 }
