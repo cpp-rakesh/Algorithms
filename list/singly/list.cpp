@@ -52,7 +52,22 @@ Node* merge(Node* a, Node* b) {
     return res;
 }
 
-int main() {
+Node* reverse(Node* head) {
+    if (head == nullptr)
+        return nullptr;
+    Node* curr = head;
+    Node* prev = nullptr;
+    Node* next = nullptr;
+    while (curr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return head=prev;
+}
+
+void test_merge() {
     Node* head1 = nullptr;
     for (int i = 1; i <= 20; i += 2)
         head1 = push_back(head1, i);
@@ -64,6 +79,27 @@ int main() {
     traverse(head2);
     Node* head3 = merge(head1, head2);
     traverse(head3);
+}
+
+void test_reverse() {
+    Node* head = nullptr;
+    head = push_back(head, 1);
+    traverse(head);
+    head = reverse(head);
+    traverse(head);
+
+    //second test case
+    head = nullptr;
+    for (int i = 1; i <= 10; ++i)
+        head = push_back(head, i);
+    traverse(head);
+    head = reverse(head);
+    traverse(head);
+}
+
+int main() {
+    //test_merge();
+    test_reverse();
 
     return 0;
 }
