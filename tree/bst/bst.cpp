@@ -133,6 +133,25 @@ public:
         return curr_sum;
     }
 
+    bool sum_of_level(Node* root, int sum) {
+        if (root) {
+            std::queue<Node*> q;
+            q.push(root);
+            while (!q.empty()) {
+                int total = 0;
+                for (int i = static_cast<int>(q.size()); i > 0; --i) {
+                    root = q.front(); q.pop();
+                    total += root->val;
+                    if (root->left) q.push(root->left);
+                    if (root->right) q.push(root->right);
+                }
+                if (total == sum)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     void reset(int val) {
         i = val;
     }
@@ -360,6 +379,20 @@ void test_10() {
     printf("largest subtree sum == [%d]\n", res);
 }
 
+void test_11() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    bst.bfs(root);
+    printf("sum of a level(%d) == [%d]\n", 25, bst.sum_of_level(root, 25));
+    printf("sum of a level(%d) == [%d]\n", 26, bst.sum_of_level(root, 26));
+    printf("sum of a level(%d) == [%d]\n", 200, bst.sum_of_level(root, 200));
+    printf("sum of a level(%d) == [%d]\n", 150, bst.sum_of_level(root, 150));
+}
+
 
 int main() {
     //test_1();
@@ -371,7 +404,8 @@ int main() {
     //test_7();
     //test_8();
     //test_9();
-    test_10();
+    //test_10();
+    test_11();
 
     return 0;
 }
