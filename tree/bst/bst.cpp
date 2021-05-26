@@ -152,6 +152,18 @@ public:
         return false;
     }
 
+    int min(Node* root) {
+        while (root->left)
+            root = root->left;
+        return root->val;
+    }
+
+    int max(Node* root) {
+        while (root->right)
+            root = root->right;
+        return root->val;
+    }
+
     void reset(int val) {
         i = val;
     }
@@ -393,6 +405,23 @@ void test_11() {
     printf("sum of a level(%d) == [%d]\n", 150, bst.sum_of_level(root, 150));
 }
 
+void test_12() {
+    BST bst;
+    Node* root = nullptr;
+    root = bst.insert(root, 100);
+    root = bst.insert(root, 50);
+    root = bst.insert(root, 150);
+    root = bst.insert(root, 25);
+    root = bst.insert(root, 10);
+    root = bst.insert(root, 200);
+    root = bst.insert(root, 250);
+    root = bst.insert(root, 5);
+    root = bst.insert(root, 1);
+    bst.bfs(root);
+    printf("minimum number == [%d]\n", bst.min(root));
+    printf("maximum number == [%d]\n", bst.max(root));
+}
+
 
 int main() {
     //test_1();
@@ -405,7 +434,8 @@ int main() {
     //test_8();
     //test_9();
     //test_10();
-    test_11();
+    //test_11();
+    test_12();
 
     return 0;
 }
