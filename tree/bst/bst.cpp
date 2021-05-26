@@ -152,6 +152,36 @@ public:
         return false;
     }
 
+    int nth_min(Node* root, int n) {
+        std::stack<Node*> st;
+        while (root || !st.empty()) {
+            while (root) {
+                st.push(root);
+                root = root->left;
+            }
+            root = st.top(); st.pop();
+            if (--n == 0)
+                break;
+            root = root->right;
+        }
+        return root->val;
+    }
+
+    int nth_max(Node* root, int n) {
+        std::stack<Node*> st;
+        while (root || !st.empty()) {
+            while (root) {
+                st.push(root);
+                root = root->right;
+            }
+            root = st.top(); st.pop();
+            if (--n == 0)
+                break;
+            root = root->left;
+        }
+        return root->val;
+    }
+
     int min(Node* root) {
         while (root->left)
             root = root->left;
@@ -420,6 +450,10 @@ void test_12() {
     bst.bfs(root);
     printf("minimum number == [%d]\n", bst.min(root));
     printf("maximum number == [%d]\n", bst.max(root));
+    for (int i = 1; i <= 7; ++i)
+        printf("[%d]th minimum number == [%d]\n",i,  bst.nth_min(root, i));
+    for (int i = 1; i <= 7; ++i)
+        printf("[%d]th maximum number == [%d]\n",i,  bst.nth_max(root, i));
 }
 
 
